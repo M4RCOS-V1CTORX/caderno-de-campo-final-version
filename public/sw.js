@@ -1,4 +1,4 @@
-const CACHE_NAME = 'caderno-de-campo-v1';
+const CACHE_NAME = 'caderno-de-campo-v2';
 
 const APP_SHELL = [
   '/',
