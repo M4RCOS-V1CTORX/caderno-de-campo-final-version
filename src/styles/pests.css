@@ -1,0 +1,299 @@
+/* =========================================================
+   PÁGINA DE PRAGAS
+========================================================= */
+
+.pests-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.pests-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.pests-heading-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.pests-back-button {
+  align-self: flex-start;
+  margin-bottom: 18px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #4f6f52;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pests-back-button:hover {
+  text-decoration: underline;
+}
+
+.pests-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #6b8e6e;
+  margin-bottom: 6px;
+}
+
+.pests-heading h2 {
+  margin: 0;
+  font-size: 32px;
+  color: #26342a;
+}
+
+.pests-heading p {
+  margin: 8px 0 0;
+  color: #6d756f;
+  font-size: 15px;
+}
+
+/* =========================================================
+   BOTÃO PRINCIPAL
+========================================================= */
+
+.pests-primary-button {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  background: #4f6f52;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pests-primary-button:hover {
+  opacity: 0.9;
+}
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.pests-content {
+  background: white;
+  border: 1px solid #e6ebe7;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.pests-section-heading {
+  margin-bottom: 20px;
+}
+
+.pests-section-heading h3 {
+  margin: 0;
+  color: #26342a;
+  font-size: 20px;
+}
+
+.pests-section-heading p {
+  margin: 6px 0 0;
+  color: #7a827c;
+  font-size: 14px;
+}
+
+/* =========================================================
+   PESQUISA
+========================================================= */
+
+.pests-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #dfe5e0;
+  border-radius: 10px;
+  padding: 0 14px;
+  height: 46px;
+  margin-bottom: 24px;
+  background: #fafcfb;
+}
+
+.pests-search span {
+  font-size: 17px;
+}
+
+.pests-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #26342a;
+}
+
+/* =========================================================
+   LISTA
+========================================================= */
+
+.pests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pest-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid #e5eae6;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.pest-card-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.pest-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #f2f6f2;
+  font-size: 23px;
+}
+
+.pest-info {
+  min-width: 0;
+}
+
+.pest-info h4 {
+  margin: 0;
+  color: #26342a;
+  font-size: 16px;
+}
+
+.pest-info p {
+  margin: 5px 0 0;
+  color: #747c76;
+  font-size: 14px;
+}
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.pest-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pests-secondary-button,
+.pests-delete-button {
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pests-secondary-button {
+  border: 1px solid #dce3dd;
+  background: white;
+  color: #4f6f52;
+}
+
+.pests-secondary-button:hover {
+  background: #f5f8f5;
+}
+
+.pests-delete-button {
+  border: 1px solid #ead7d7;
+  background: white;
+  color: #a34d4d;
+}
+
+.pests-delete-button:hover {
+  background: #fff5f5;
+}
+
+/* =========================================================
+   ESTADO VAZIO
+========================================================= */
+
+.pests-empty {
+  text-align: center;
+  padding: 55px 20px;
+}
+
+.pests-empty-icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.pests-empty h3 {
+  margin: 0;
+  color: #26342a;
+  font-size: 18px;
+}
+
+.pests-empty p {
+  max-width: 450px;
+  margin: 8px auto 20px;
+  color: #777f79;
+  font-size: 14px;
+}
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 768px) {
+  .pests-page {
+    padding: 20px 16px;
+  }
+
+  .pests-heading {
+    flex-direction: column;
+  }
+
+  .pests-primary-button {
+    width: 100%;
+  }
+
+  .pests-content {
+    padding: 18px;
+  }
+
+  .pest-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pest-actions {
+    width: 100%;
+  }
+
+  .pests-secondary-button,
+  .pests-delete-button {
+    flex: 1;
+  }
+}

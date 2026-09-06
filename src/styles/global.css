@@ -1,0 +1,635 @@
+/* =========================================================
+   CADERNO DE CAMPO — GLOBAL
+   PREMIUM / APPLE INSPIRED
+========================================================= */
+
+:root {
+  /* =======================================================
+     CORES PRINCIPAIS
+  ======================================================= */
+
+  --green: #107c41;
+  --green-dark: #0b6835;
+  --green-light: #e9f5ee;
+  --green-hover: #f0f8f3;
+
+  --text: #171a18;
+  --text-secondary: #68706b;
+  --text-muted: #969d98;
+
+  /* FUNDO GERAL */
+  --background: #eef1ef;
+
+  /* SUPERFÍCIES */
+  --white: #ffffff;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-solid: #ffffff;
+  --surface-soft: rgba(248, 250, 249, 0.86);
+
+  /* BORDAS */
+  --border: rgba(0, 0, 0, 0.075);
+  --border-light: rgba(0, 0, 0, 0.045);
+
+  /* ALERTAS */
+  --danger: #b4232c;
+  --danger-light: #fff4f4;
+
+  /* DIMENSÕES */
+  --radius: 14px;
+  --radius-small: 10px;
+  --radius-large: 18px;
+
+  /* =======================================================
+     SOMBRAS PREMIUM
+  ======================================================= */
+
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.025),
+    0 6px 18px rgba(0, 0, 0, 0.035),
+    0 18px 40px rgba(0, 0, 0, 0.025);
+
+  --shadow-hover:
+    0 4px 10px rgba(0, 0, 0, 0.035),
+    0 16px 35px rgba(0, 0, 0, 0.075);
+
+  --shadow-button:
+    0 6px 16px rgba(16, 124, 65, 0.16);
+
+  --shadow-header:
+    0 1px 3px rgba(0, 0, 0, 0.025),
+    0 8px 25px rgba(0, 0, 0, 0.025);
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+
+  background: var(--background);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 8% -5%,
+      rgba(16, 124, 65, 0.09),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(255, 255, 255, 0.8),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(16, 124, 65, 0.035),
+      transparent 38%
+    ),
+    linear-gradient(
+      135deg,
+      #eef2ef 0%,
+      #f3f5f4 48%,
+      #e9eeeb 100%
+    );
+
+  background-attachment: fixed;
+
+  color: var(--text);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* =========================================================
+   SELEÇÃO DE TEXTO
+========================================================= */
+
+::selection {
+  background: rgba(16, 124, 65, 0.16);
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   ELEMENTOS BÁSICOS
+========================================================= */
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(16, 124, 65, 0.12);
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+  min-height: 100vh;
+
+  position: relative;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+  width: 100%;
+  min-height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 38px;
+
+  position: relative;
+  z-index: 10;
+
+  background:
+    rgba(255, 255, 255, 0.78);
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.055);
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.025),
+    0 8px 25px rgba(0, 0, 0, 0.025);
+
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+
+/* =========================================================
+   MARCA
+========================================================= */
+
+.brand {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  padding-left: 50px;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo-icon {
+  position: absolute;
+
+  left: 0;
+  top: 50%;
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #16964f 0%,
+      #107c41 55%,
+      #0d6e39 100%
+    );
+
+  color: #ffffff;
+
+  font-size: 17px;
+
+  box-shadow:
+    0 4px 10px rgba(16, 124, 65, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.brand:hover .logo-icon {
+  transform:
+    translateY(-50%)
+    scale(1.04);
+
+  box-shadow:
+    0 6px 15px rgba(16, 124, 65, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+
+/* =========================================================
+   TÍTULO DO SISTEMA
+========================================================= */
+
+.header h1 {
+  color: #171a18;
+
+  font-size: 18px;
+  font-weight: 650;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.35px;
+}
+
+.header p {
+  margin-top: 3px;
+
+  color: #747b76;
+
+  font-size: 11px;
+
+  letter-spacing: -0.05px;
+}
+
+
+/* =========================================================
+   STATUS DE CONEXÃO
+========================================================= */
+
+.connection-status {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 7px 11px;
+
+  border: 1px solid rgba(0, 0, 0, 0.065);
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.72);
+
+  color: #69716c;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.025);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* =========================================================
+   STATUS DOT
+========================================================= */
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #f59e0b;
+
+  box-shadow:
+    0 0 0 3px rgba(245, 158, 11, 0.1),
+    0 0 8px rgba(245, 158, 11, 0.12);
+}
+
+
+/* =========================================================
+   BOTÕES — BASE
+========================================================= */
+
+.primary-button,
+.secondary-button,
+.cancel-button,
+.edit-button,
+.delete-button {
+  font-family: inherit;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+
+/* =========================================================
+   BOTÃO PRINCIPAL
+========================================================= */
+
+.primary-button {
+  min-height: 42px;
+
+  padding: 0 18px;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #16894b 0%,
+      #107c41 52%,
+      #0d6e39 100%
+    );
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  box-shadow:
+    0 6px 16px rgba(16, 124, 65, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.035);
+
+  box-shadow:
+    0 10px 24px rgba(16, 124, 65, 0.21),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+
+  box-shadow:
+    0 4px 10px rgba(16, 124, 65, 0.14);
+}
+
+.primary-button:disabled {
+  opacity: 0.55;
+
+  transform: none;
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   BOTÕES SECUNDÁRIOS
+========================================================= */
+
+.secondary-button,
+.cancel-button {
+  min-height: 42px;
+
+  padding: 0 18px;
+
+  border: 1px solid rgba(0, 0, 0, 0.085);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.78);
+
+  color: #444b47;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.025);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.secondary-button:hover,
+.cancel-button:hover {
+  transform: translateY(-1px);
+
+  background:
+    rgba(255, 255, 255, 0.96);
+
+  border-color: rgba(0, 0, 0, 0.13);
+
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.05);
+}
+
+.secondary-button:active,
+.cancel-button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   SCROLLBAR — DESKTOP
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+
+  border-radius: 999px;
+
+  background:
+    rgba(0, 0, 0, 0.14);
+
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(0, 0, 0, 0.22);
+
+  background-clip: padding-box;
+}
+
+
+/* =========================================================
+   MOBILE HEADER
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .header {
+    min-height: 64px;
+
+    padding: 0 16px;
+
+    background:
+      rgba(255, 255, 255, 0.84);
+  }
+
+  .brand {
+    padding-left: 43px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+  }
+
+  .header h1 {
+    font-size: 15px;
+
+    letter-spacing: -0.25px;
+  }
+
+  .header p {
+    display: none;
+  }
+
+  .connection-status {
+    padding: 6px 9px;
+
+    font-size: 9px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE PEQUENO
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .header {
+    padding: 0 12px;
+  }
+
+  .brand {
+    padding-left: 39px;
+  }
+
+  .logo-icon {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+  }
+
+  .header h1 {
+    font-size: 14px;
+  }
+
+  .connection-status {
+    gap: 5px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    box-shadow: none;
+  }
+}
+
+
+/* =========================================================
+   REDUÇÃO DE MOVIMENTO
+   Acessibilidade
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+}

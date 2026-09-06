@@ -1,0 +1,237 @@
+/* =========================================================
+   NOVA DOENÇA
+========================================================= */
+
+.new-disease {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.new-disease .page-heading {
+  margin-bottom: 28px;
+}
+
+.new-disease .page-heading-content {
+  max-width: 750px;
+}
+
+.new-disease .home-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+}
+
+.new-disease .page-heading h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #1f2937;
+}
+
+.new-disease .page-heading p {
+  margin: 10px 0 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* =========================================================
+   FORMULÁRIO
+========================================================= */
+
+.disease-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+   SEÇÃO
+========================================================= */
+
+.disease-form .form-section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.disease-form .form-section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.disease-form .form-section-icon {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f3f4f6;
+  font-size: 22px;
+}
+
+.disease-form .form-section-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #1f2937;
+}
+
+.disease-form .form-section-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.disease-form .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.disease-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.disease-form .form-group.full {
+  grid-column: 1 / -1;
+}
+
+.disease-form .form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.disease-form .form-group input,
+.disease-form .form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1f2937;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.disease-form .form-group input {
+  height: 46px;
+}
+
+.disease-form .form-group textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.disease-form .form-group input:focus,
+.disease-form .form-group textarea:focus {
+  border-color: #4b7f52;
+  box-shadow: 0 0 0 3px rgba(75, 127, 82, 0.12);
+}
+
+.disease-form .form-group input::placeholder,
+.disease-form .form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.disease-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.disease-form .cancel-button,
+.disease-form .primary-button {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.disease-form .cancel-button {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #374151;
+}
+
+.disease-form .cancel-button:hover {
+  background: #f9fafb;
+}
+
+.disease-form .primary-button {
+  border: 1px solid #4b7f52;
+  background: #4b7f52;
+  color: #ffffff;
+}
+
+.disease-form .primary-button:hover {
+  background: #3f6c45;
+}
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 700px) {
+  .new-disease {
+    padding: 24px 16px 40px;
+  }
+
+  .new-disease .page-heading h2 {
+    font-size: 25px;
+  }
+
+  .disease-form .form-section {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  .disease-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .disease-form .form-group.full {
+    grid-column: auto;
+  }
+
+  .disease-form .form-actions {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+
+  .disease-form .cancel-button,
+  .disease-form .primary-button {
+    width: 100%;
+  }
+}

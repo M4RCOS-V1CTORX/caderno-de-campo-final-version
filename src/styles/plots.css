@@ -1,0 +1,1026 @@
+/* =========================================================
+   TALHÕES — CADERNO DE CAMPO
+   VISUAL SYSTEM
+========================================================= */
+
+.plots-page {
+  width: 100%;
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  padding: 40px 38px 70px;
+
+  color: var(--text);
+
+  animation: plotsPageEnter 0.35s ease-out;
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.plots-heading {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 14px;
+}
+
+.plots-heading-content {
+  min-width: 0;
+}
+
+.plots-heading .home-label {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-bottom: 12px;
+
+  padding: 6px 10px;
+
+  border: 1px solid rgba(16, 124, 65, 0.14);
+
+  border-radius: 999px;
+
+  background: rgba(16, 124, 65, 0.065);
+
+  color: var(--green);
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.plots-title-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.plots-title-icon {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid rgba(16, 124, 65, 0.13);
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f1f8f3,
+      #e7f1ea
+    );
+
+  color: var(--green);
+
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+.plots-heading h2 {
+  margin: 0;
+
+  color: #171a18;
+
+  font-size: 30px;
+
+  font-weight: 600;
+
+  letter-spacing: -1px;
+
+  line-height: 1.08;
+}
+
+.plots-heading p {
+  margin-top: 9px;
+
+  color: #737874;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   BOTÃO NOVO TALHÃO
+========================================================= */
+
+.plots-new-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  flex-shrink: 0;
+
+  min-width: 145px;
+}
+
+
+/* =========================================================
+   BOTÃO VOLTAR
+========================================================= */
+
+.back-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  min-height: 34px;
+
+  margin-bottom: 21px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.back-button:hover {
+  color: var(--green);
+
+  transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   RESUMO
+========================================================= */
+
+.plots-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 25px;
+}
+
+.plots-summary-card {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  min-width: 0;
+
+  padding: 14px 15px;
+
+  border: 1px solid rgba(0, 0, 0, 0.055);
+
+  border-radius: 12px;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.02);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.plots-summary-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid rgba(16, 124, 65, 0.09);
+
+  border-radius: 9px;
+
+  background: #eef6f0;
+
+  color: var(--green);
+}
+
+.plots-summary-card span {
+  display: block;
+
+  color: #858c87;
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+.plots-summary-card strong {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #202521;
+
+  font-size: 15px;
+
+  font-weight: 650;
+
+  letter-spacing: -0.2px;
+}
+
+.summary-property-name {
+  overflow: hidden;
+
+  max-width: 300px;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.plots-content {
+  width: 100%;
+}
+
+
+/* =========================================================
+   CABEÇALHO DA LISTA
+========================================================= */
+
+.plots-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 11px;
+
+  width: 100%;
+}
+
+.plots-list-heading {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 4px;
+
+  padding: 0 2px;
+}
+
+.section-kicker {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--green);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.13em;
+}
+
+.plots-list-heading h3 {
+  margin: 0;
+
+  color: #202421;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  letter-spacing: -0.25px;
+}
+
+.plots-count {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 27px;
+
+  padding: 0 9px;
+
+  border: 1px solid rgba(16, 124, 65, 0.1);
+
+  border-radius: 999px;
+
+  background: #f1f7f3;
+
+  color: var(--green);
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   CARD DO TALHÃO
+========================================================= */
+
+.plot-card {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  width: 100%;
+
+  padding: 18px 19px;
+
+  border: 1px solid rgba(0, 0, 0, 0.065);
+
+  border-radius: 13px;
+
+  background: var(--white);
+
+  box-shadow: var(--shadow-card);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.plot-card::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+
+  width: 2px;
+
+  border-radius: 999px;
+
+  background: transparent;
+
+  transition:
+    background 0.2s ease;
+}
+
+.plot-card:hover {
+  border-color: rgba(16, 124, 65, 0.16);
+
+  box-shadow: var(--shadow-hover);
+
+  transform: translateY(-2px);
+}
+
+.plot-card:hover::before {
+  background: var(--green);
+}
+
+
+/* =========================================================
+   CONTEÚDO DO CARD
+========================================================= */
+
+.plot-card-content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+
+/* =========================================================
+   ÍCONE DO TALHÃO
+========================================================= */
+
+.plot-icon {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 45px;
+
+  border: 1px solid rgba(16, 124, 65, 0.09);
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f2f8f4,
+      #e8f2eb
+    );
+
+  color: var(--green);
+}
+
+
+/* =========================================================
+   INFORMAÇÕES
+========================================================= */
+
+.plot-info {
+  min-width: 0;
+}
+
+.plot-info h3 {
+  margin: 0;
+
+  color: #1d241f;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  letter-spacing: -0.15px;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   DETALHES
+========================================================= */
+
+.plot-details {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px 15px;
+
+  margin-top: 8px;
+}
+
+.plot-detail {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  min-width: 0;
+
+  color: #747c77;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+}
+
+.plot-detail svg {
+  flex-shrink: 0;
+
+  color: #89938c;
+}
+
+.plot-detail span {
+  display: inline-flex;
+
+  align-items: baseline;
+
+  gap: 4px;
+}
+
+.plot-detail strong {
+  color: #555e58;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.plot-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  flex-shrink: 0;
+}
+
+.plot-action-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  min-height: 35px;
+
+  padding: 0 11px;
+
+  border-radius: 9px;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.plot-action-button:hover {
+  transform: translateY(-1px);
+}
+
+.plot-action-button.edit {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  background: #ffffff;
+
+  color: #555d58;
+}
+
+.plot-action-button.edit:hover {
+  border-color: rgba(16, 124, 65, 0.2);
+
+  background: #f5f9f6;
+
+  color: var(--green);
+}
+
+.plot-action-button.delete {
+  border: 1px solid rgba(180, 35, 44, 0.1);
+
+  background: var(--danger-light);
+
+  color: var(--danger);
+}
+
+.plot-action-button.delete:hover {
+  border-color: rgba(180, 35, 44, 0.18);
+
+  background: #fff0f0;
+}
+
+.plot-arrow {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 2px;
+
+  color: #a0a7a2;
+
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.plot-card:hover .plot-arrow {
+  color: var(--green);
+
+  transform: translateX(2px);
+}
+
+
+/* =========================================================
+   ESTADO VAZIO
+========================================================= */
+
+.empty-state {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 320px;
+
+  padding: 45px 30px;
+
+  text-align: center;
+
+  border: 1px solid rgba(0, 0, 0, 0.065);
+
+  border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.88);
+
+  box-shadow: var(--shadow-card);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.empty-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 13px;
+
+  border: 1px solid rgba(16, 124, 65, 0.09);
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f2f8f4,
+      #e8f2eb
+    );
+
+  color: var(--green);
+}
+
+.empty-kicker {
+  margin-bottom: 5px;
+
+  color: var(--green);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.13em;
+}
+
+.empty-state h3 {
+  margin: 0;
+
+  color: #202421;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  letter-spacing: -0.2px;
+}
+
+.empty-state p {
+  max-width: 430px;
+
+  margin: 8px 0 20px;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+.empty-state .primary-button,
+.empty-state .secondary-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+}
+
+
+/* =========================================================
+   CARREGAMENTO
+========================================================= */
+
+.loading-state {
+  min-height: 300px;
+}
+
+.loading-state > svg {
+  margin-bottom: 14px;
+
+  color: var(--green);
+}
+
+.loading-spinner {
+  animation: plotsSpin 0.8s linear infinite;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .plots-page {
+    padding: 34px 24px 55px;
+  }
+
+  .plots-heading {
+    align-items: flex-start;
+  }
+
+  .plot-card {
+    padding: 17px;
+  }
+
+  .plot-arrow {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .plots-page {
+    padding: 27px 15px 40px;
+  }
+
+  .plots-heading {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 17px;
+
+    margin-bottom: 11px;
+  }
+
+  .plots-title-row {
+    gap: 9px;
+  }
+
+  .plots-title-icon {
+    width: 35px;
+    height: 35px;
+
+    border-radius: 10px;
+  }
+
+  .plots-heading h2 {
+    font-size: 25px;
+
+    letter-spacing: -0.8px;
+  }
+
+  .plots-heading p {
+    font-size: 12px;
+  }
+
+  .plots-new-button {
+    width: 100%;
+  }
+
+
+  /* RESUMO */
+
+  .plots-summary {
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+
+    margin-bottom: 21px;
+  }
+
+  .plots-summary-card {
+    padding: 12px 13px;
+  }
+
+
+  /* VOLTAR */
+
+  .back-button {
+    margin-bottom: 17px;
+
+    font-size: 11px;
+  }
+
+
+  /* LISTA */
+
+  .plots-list-heading {
+    align-items: flex-start;
+
+    margin-bottom: 3px;
+  }
+
+  .plots-list-heading h3 {
+    font-size: 14px;
+  }
+
+  .plots-count {
+    min-height: 25px;
+
+    font-size: 8px;
+  }
+
+
+  /* CARDS */
+
+  .plot-card {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+
+    padding: 16px;
+  }
+
+  .plot-card-content {
+    align-items: flex-start;
+
+    gap: 11px;
+  }
+
+  .plot-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-basis: 40px;
+
+    border-radius: 10px;
+  }
+
+  .plot-info h3 {
+    font-size: 13px;
+  }
+
+  .plot-details {
+    flex-direction: column;
+
+    gap: 5px;
+
+    margin-top: 7px;
+  }
+
+  .plot-detail {
+    font-size: 10px;
+  }
+
+
+  /* AÇÕES */
+
+  .plot-actions {
+    width: 100%;
+  }
+
+  .plot-action-button {
+    flex: 1;
+
+    width: 100%;
+  }
+
+
+  /* EMPTY */
+
+  .empty-state {
+    min-height: 280px;
+
+    padding: 35px 20px;
+
+    border-radius: 13px;
+  }
+
+  .empty-state h3 {
+    font-size: 15px;
+  }
+
+  .empty-state p {
+    font-size: 11px;
+  }
+}
+
+
+/* =========================================================
+   CELULARES PEQUENOS
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .plots-page {
+    padding-left: 11px;
+
+    padding-right: 11px;
+  }
+
+  .plots-heading h2 {
+    font-size: 24px;
+  }
+
+  .plots-title-icon {
+    width: 33px;
+    height: 33px;
+  }
+
+  .plot-card {
+    padding: 14px;
+  }
+
+  .plots-summary-card {
+    padding: 11px 12px;
+  }
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes plotsPageEnter {
+
+  from {
+    opacity: 0;
+
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+@keyframes plotsSpin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

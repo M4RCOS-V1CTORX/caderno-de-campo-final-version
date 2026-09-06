@@ -1,0 +1,299 @@
+/* =========================================================
+   PÁGINA DE DOENÇAS
+========================================================= */
+
+.diseases-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.diseases-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.diseases-heading-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.diseases-back-button {
+  align-self: flex-start;
+  margin-bottom: 18px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #4f6f52;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.diseases-back-button:hover {
+  text-decoration: underline;
+}
+
+.diseases-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #6b8e6e;
+  margin-bottom: 6px;
+}
+
+.diseases-heading h2 {
+  margin: 0;
+  font-size: 32px;
+  color: #26342a;
+}
+
+.diseases-heading p {
+  margin: 8px 0 0;
+  color: #6d756f;
+  font-size: 15px;
+}
+
+/* =========================================================
+   BOTÃO PRINCIPAL
+========================================================= */
+
+.diseases-primary-button {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  background: #4f6f52;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.diseases-primary-button:hover {
+  opacity: 0.9;
+}
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.diseases-content {
+  background: white;
+  border: 1px solid #e6ebe7;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.diseases-section-heading {
+  margin-bottom: 20px;
+}
+
+.diseases-section-heading h3 {
+  margin: 0;
+  color: #26342a;
+  font-size: 20px;
+}
+
+.diseases-section-heading p {
+  margin: 6px 0 0;
+  color: #7a827c;
+  font-size: 14px;
+}
+
+/* =========================================================
+   PESQUISA
+========================================================= */
+
+.diseases-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #dfe5e0;
+  border-radius: 10px;
+  padding: 0 14px;
+  height: 46px;
+  margin-bottom: 24px;
+  background: #fafcfb;
+}
+
+.diseases-search span {
+  font-size: 17px;
+}
+
+.diseases-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #26342a;
+}
+
+/* =========================================================
+   LISTA
+========================================================= */
+
+.diseases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.disease-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid #e5eae6;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.disease-card-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.disease-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #f2f6f2;
+  font-size: 23px;
+}
+
+.disease-info {
+  min-width: 0;
+}
+
+.disease-info h4 {
+  margin: 0;
+  color: #26342a;
+  font-size: 16px;
+}
+
+.disease-info p {
+  margin: 5px 0 0;
+  color: #747c76;
+  font-size: 14px;
+}
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.disease-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.diseases-secondary-button,
+.diseases-delete-button {
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.diseases-secondary-button {
+  border: 1px solid #dce3dd;
+  background: white;
+  color: #4f6f52;
+}
+
+.diseases-secondary-button:hover {
+  background: #f5f8f5;
+}
+
+.diseases-delete-button {
+  border: 1px solid #ead7d7;
+  background: white;
+  color: #a34d4d;
+}
+
+.diseases-delete-button:hover {
+  background: #fff5f5;
+}
+
+/* =========================================================
+   ESTADO VAZIO
+========================================================= */
+
+.diseases-empty {
+  text-align: center;
+  padding: 55px 20px;
+}
+
+.diseases-empty-icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.diseases-empty h3 {
+  margin: 0;
+  color: #26342a;
+  font-size: 18px;
+}
+
+.diseases-empty p {
+  max-width: 450px;
+  margin: 8px auto 20px;
+  color: #777f79;
+  font-size: 14px;
+}
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 768px) {
+  .diseases-page {
+    padding: 20px 16px;
+  }
+
+  .diseases-heading {
+    flex-direction: column;
+  }
+
+  .diseases-primary-button {
+    width: 100%;
+  }
+
+  .diseases-content {
+    padding: 18px;
+  }
+
+  .disease-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .disease-actions {
+    width: 100%;
+  }
+
+  .diseases-secondary-button,
+  .diseases-delete-button {
+    flex: 1;
+  }
+}

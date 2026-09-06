@@ -1,0 +1,1084 @@
+/* =========================================================
+   CULTURAS
+   Visual premium / clean / agrícola
+========================================================= */
+
+.cultures-page {
+  width: 100%;
+  max-width: 1040px;
+
+  margin: 0 auto;
+
+  padding: 30px 30px 70px;
+}
+
+/* =========================================================
+   VOLTAR
+========================================================= */
+
+.cultures-back-button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 24px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.cultures-back-button:hover {
+  color: var(--green);
+
+  transform: translateX(-2px);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.cultures-hero {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  overflow: hidden;
+
+  margin-bottom: 15px;
+
+  padding: 27px 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbf9 0%,
+      #f2f7f4 100%
+    );
+
+  border: 1px solid #dfe8e2;
+
+  border-radius: 18px;
+}
+
+.cultures-hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  right: -65px;
+  top: -85px;
+
+  border-radius: 50%;
+
+  background: rgba(16, 124, 65, 0.055);
+
+  pointer-events: none;
+}
+
+.cultures-hero-content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  min-width: 0;
+}
+
+.cultures-hero-icon {
+  width: 49px;
+  height: 49px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid #d3e3d9;
+
+  border-radius: 14px;
+
+  background: #e8f3ec;
+
+  color: var(--green);
+}
+
+.cultures-kicker {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--green);
+
+  font-size: 9px;
+  font-weight: 750;
+
+  letter-spacing: 0.14em;
+}
+
+.cultures-hero h1 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 27px;
+  font-weight: 650;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.6px;
+}
+
+.cultures-hero p {
+  max-width: 590px;
+
+  margin: 7px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   BOTÃO NOVA CULTURA
+========================================================= */
+
+.cultures-new-button {
+  position: relative;
+  z-index: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  flex-shrink: 0;
+
+  min-height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid var(--green);
+
+  border-radius: 10px;
+
+  background: var(--green);
+
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 10px rgba(16, 124, 65, 0.13);
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.cultures-new-button:hover {
+  background: var(--green-dark);
+
+  border-color: var(--green-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 14px rgba(16, 124, 65, 0.17);
+}
+
+.cultures-new-button svg:last-child {
+  opacity: 0.7;
+}
+
+/* =========================================================
+   OVERVIEW
+========================================================= */
+
+.cultures-overview {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 22px;
+}
+
+.overview-card {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  min-height: 82px;
+
+  padding: 14px 17px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  box-shadow: var(--shadow-card);
+}
+
+.overview-icon {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+
+  background: var(--green-light);
+
+  color: var(--green);
+}
+
+.overview-info span {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: var(--text-muted);
+
+  font-size: 8px;
+  font-weight: 750;
+
+  letter-spacing: 0.12em;
+}
+
+.overview-info strong {
+  display: inline-block;
+
+  margin-right: 7px;
+
+  color: var(--text);
+
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.overview-info small {
+  color: var(--text-secondary);
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.cultures-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 12px;
+}
+
+.cultures-toolbar-title span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+  font-weight: 750;
+
+  letter-spacing: 0.13em;
+}
+
+.cultures-toolbar-title h2 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.culture-search {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 330px;
+  height: 40px;
+}
+
+.culture-search > svg {
+  position: absolute;
+
+  left: 12px;
+
+  color: #8b958f;
+
+  pointer-events: none;
+}
+
+.culture-search input {
+  width: 100%;
+  height: 40px;
+
+  padding: 0 38px;
+
+  border: 1px solid #dce2de;
+
+  border-radius: 10px;
+
+  background: #fff;
+
+  color: var(--text);
+
+  font-size: 12px;
+
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.culture-search input::placeholder {
+  color: #9ba39e;
+}
+
+.culture-search input:hover {
+  border-color: #cbd3ce;
+}
+
+.culture-search input:focus {
+  border-color: var(--green);
+
+  box-shadow:
+    0 0 0 3px rgba(16, 124, 65, 0.08);
+}
+
+.culture-search-clear {
+  position: absolute;
+
+  right: 8px;
+
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #f1f4f2;
+
+  color: #78827c;
+
+  cursor: pointer;
+}
+
+.culture-search-clear:hover {
+  background: #e7ece9;
+
+  color: var(--text);
+}
+
+/* =========================================================
+   LISTA
+========================================================= */
+
+.cultures-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.cultures-list-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 3px 2px 7px;
+}
+
+.cultures-list-header > div:first-child span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: var(--text-muted);
+
+  font-size: 8px;
+  font-weight: 750;
+
+  letter-spacing: 0.12em;
+}
+
+.cultures-list-header h2 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.search-result-label {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 9px;
+
+  border: 1px solid #e0e7e2;
+
+  border-radius: 7px;
+
+  background: #f7faf8;
+
+  color: var(--text-secondary);
+
+  font-size: 10px;
+}
+
+.search-result-label strong {
+  color: var(--green);
+
+  font-weight: 650;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.culture-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 17px 18px;
+
+  background: #fff;
+
+  border: 1px solid var(--border);
+
+  border-radius: 13px;
+
+  box-shadow: var(--shadow-card);
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.culture-card:hover {
+  border-color: #d1dbd5;
+
+  box-shadow: var(--shadow-card-hover);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   PARTE PRINCIPAL
+========================================================= */
+
+.culture-main {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+.culture-icon {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid #dce8e0;
+
+  border-radius: 12px;
+
+  background: #f0f7f3;
+
+  color: var(--green);
+}
+
+.culture-info {
+  min-width: 0;
+}
+
+.culture-name-row {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+.culture-info h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+  font-weight: 650;
+
+  line-height: 1.3;
+
+  word-break: break-word;
+}
+
+/* =========================================================
+   TAGS
+========================================================= */
+
+.culture-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin-top: 7px;
+}
+
+.culture-tag {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 4px 7px;
+
+  border: 1px solid #e1e7e3;
+
+  border-radius: 6px;
+
+  background: #f8faf9;
+
+  color: var(--text-secondary);
+
+  font-size: 10px;
+
+  line-height: 1.2;
+}
+
+.culture-tag svg {
+  color: var(--green);
+}
+
+/* =========================================================
+   OBSERVAÇÕES
+========================================================= */
+
+.culture-note {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 6px;
+
+  max-width: 680px;
+
+  margin-top: 7px;
+
+  color: #7d8781;
+}
+
+.culture-note svg {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+}
+
+.culture-note span {
+  overflow: hidden;
+
+  font-size: 10px;
+
+  line-height: 1.45;
+
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.culture-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  flex-shrink: 0;
+}
+
+.culture-edit-button,
+.culture-delete-button {
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 11px;
+
+  border-radius: 8px;
+
+  font-size: 11px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.culture-edit-button {
+  border: 1px solid #dce2de;
+
+  background: #fff;
+
+  color: #59635d;
+}
+
+.culture-edit-button:hover {
+  border-color: #c8d3cc;
+
+  background: #f5f8f6;
+
+  color: var(--green);
+}
+
+.culture-delete-button {
+  border: 1px solid #eadbdb;
+
+  background: #fff;
+
+  color: #a04c52;
+}
+
+.culture-delete-button:hover {
+  border-color: #e3c4c6;
+
+  background: #fff7f7;
+
+  color: #a52831;
+}
+
+/* =========================================================
+   ESTADOS VAZIOS
+========================================================= */
+
+.cultures-empty {
+  min-height: 350px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 45px 30px;
+
+  text-align: center;
+
+  background: #fff;
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  box-shadow: var(--shadow-card);
+}
+
+.cultures-empty-icon {
+  width: 62px;
+  height: 62px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+
+  border: 1px solid #dce8e0;
+
+  border-radius: 15px;
+
+  background: var(--green-light);
+
+  color: var(--green);
+}
+
+.cultures-empty-icon.loading {
+  background: #f5f7f6;
+
+  color: var(--text-secondary);
+}
+
+.empty-kicker {
+  margin-bottom: 5px;
+
+  color: var(--green);
+
+  font-size: 8px;
+  font-weight: 750;
+
+  letter-spacing: 0.13em;
+}
+
+.cultures-empty h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.cultures-empty p {
+  max-width: 430px;
+
+  margin: 8px 0 20px;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   BOTÕES DO ESTADO VAZIO
+========================================================= */
+
+.empty-primary-button,
+.empty-secondary-button {
+  min-height: 39px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 14px;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.empty-primary-button {
+  border: 1px solid var(--green);
+
+  background: var(--green);
+
+  color: #fff;
+}
+
+.empty-primary-button:hover {
+  background: var(--green-dark);
+
+  border-color: var(--green-dark);
+}
+
+.empty-secondary-button {
+  border: 1px solid #dce2de;
+
+  background: #fff;
+
+  color: var(--text-secondary);
+}
+
+.empty-secondary-button:hover {
+  background: #f5f7f6;
+
+  color: var(--green);
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.cultures-spinner {
+  animation: cultures-spin 0.8s linear infinite;
+}
+
+@keyframes cultures-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+  .cultures-page {
+    padding: 30px 24px 55px;
+  }
+
+  .cultures-hero {
+    align-items: flex-start;
+
+    padding: 24px;
+  }
+
+  .culture-card {
+    padding: 16px;
+  }
+
+  .culture-note {
+    max-width: 500px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .cultures-page {
+    padding: 25px 15px 40px;
+  }
+
+  .cultures-back-button {
+    margin-bottom: 20px;
+  }
+
+  .cultures-hero {
+    flex-direction: column;
+
+    gap: 20px;
+
+    padding: 20px;
+  }
+
+  .cultures-hero-content {
+    align-items: flex-start;
+
+    gap: 11px;
+  }
+
+  .cultures-hero-icon {
+    width: 41px;
+    height: 41px;
+
+    border-radius: 11px;
+  }
+
+  .cultures-hero h1 {
+    font-size: 24px;
+  }
+
+  .cultures-hero p {
+    font-size: 12px;
+  }
+
+  .cultures-new-button {
+    width: 100%;
+  }
+
+  .cultures-overview {
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+
+    margin-bottom: 19px;
+  }
+
+  .overview-card {
+    min-height: 70px;
+  }
+
+  .cultures-toolbar {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 12px;
+  }
+
+  .culture-search {
+    width: 100%;
+  }
+
+  .cultures-list-header {
+    align-items: center;
+  }
+
+  .search-result-label {
+    max-width: 50%;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+  }
+
+  .culture-card {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+
+    padding: 15px;
+  }
+
+  .culture-main {
+    align-items: flex-start;
+
+    gap: 11px;
+  }
+
+  .culture-icon {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 10px;
+  }
+
+  .culture-info h3 {
+    font-size: 14px;
+  }
+
+  .culture-tags {
+    gap: 5px;
+  }
+
+  .culture-tag {
+    font-size: 9px;
+  }
+
+  .culture-note {
+    max-width: 100%;
+  }
+
+  .culture-actions {
+    width: 100%;
+  }
+
+  .culture-edit-button,
+  .culture-delete-button {
+    flex: 1;
+
+    width: 100%;
+  }
+
+  .cultures-empty {
+    min-height: 300px;
+
+    padding: 35px 20px;
+  }
+}
+
+/* =========================================================
+   MOBILE PEQUENO
+========================================================= */
+
+@media (max-width: 380px) {
+  .cultures-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .cultures-hero {
+    padding: 18px;
+  }
+
+  .cultures-hero h1 {
+    font-size: 22px;
+  }
+
+  .culture-card {
+    padding: 14px;
+  }
+
+  .culture-actions {
+    flex-direction: column;
+  }
+
+  .culture-edit-button,
+  .culture-delete-button {
+    flex: none;
+  }
+}

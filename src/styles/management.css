@@ -1,0 +1,848 @@
+/* =========================================================
+   MANEJO — PADRÃO VISUAL HOME
+   ========================================================= */
+
+.management-page {
+  min-height: 100vh;
+  padding: 28px 34px 34px;
+  background: #f7f9f8;
+  color: #18201b;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.management-header {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.management-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  color: #66716a;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 22px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.management-back:hover {
+  color: #315f45;
+}
+
+.management-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 42px 48px;
+  border-radius: 20px;
+  background:
+    radial-gradient(
+      circle at 82% 20%,
+      rgba(76, 125, 94, 0.2),
+      transparent 30%
+    ),
+    linear-gradient(
+      125deg,
+      #0b1812 0%,
+      #10261b 55%,
+      #163325 100%
+    );
+  border: 1px solid #1e3529;
+  box-shadow: 0 18px 45px rgba(20, 40, 29, 0.12);
+}
+
+.management-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    );
+  background-size: 34px 34px;
+}
+
+.management-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
+
+.management-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 11px;
+  border: 1px solid rgba(174, 205, 185, 0.2);
+  border-radius: 7px;
+  color: #b8c9be;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.management-hero h1 {
+  margin: 18px 0 14px;
+  color: #f6f8f6;
+  font-size: clamp(32px, 4vw, 50px);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.management-hero h1 span {
+  color: #a8c4b1;
+}
+
+.management-hero p {
+  max-width: 570px;
+  margin: 0;
+  color: #aebdb4;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.management-hero-icon {
+  position: relative;
+  z-index: 2;
+  width: 145px;
+  height: 145px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(185, 210, 194, 0.72);
+  border: 1px solid rgba(181, 207, 191, 0.13);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.management-hero-floating {
+  position: absolute;
+  right: -28px;
+  bottom: -8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid rgba(179, 205, 190, 0.15);
+  border-radius: 9px;
+  background: rgba(20, 40, 29, 0.82);
+  color: #c9d8cf;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   OVERVIEW
+   ========================================================= */
+
+.management-overview,
+.management-content {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.management-overview {
+  padding: 48px 0 22px;
+}
+
+.management-section-heading,
+.management-content-header {
+  margin-bottom: 20px;
+}
+
+.management-section-heading span,
+.management-section-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #8a938d;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.management-section-heading h2,
+.management-content-header h2 {
+  margin: 0;
+  color: #1a211d;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.management-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.management-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 96px;
+  padding: 17px;
+  background: #ffffff;
+  border: 1px solid #e1e6e3;
+  border-radius: 13px;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.management-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: #cfd9d2;
+  box-shadow: 0 8px 20px rgba(30, 50, 38, 0.05);
+}
+
+.management-summary-icon {
+  width: 39px;
+  height: 39px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #edf4ef;
+  color: #315f45;
+}
+
+.management-summary-icon.planned {
+  background: #f3f1e7;
+  color: #83743b;
+}
+
+.management-summary-icon.progress {
+  background: #edf2f4;
+  color: #4f6870;
+}
+
+.management-summary-icon.completed {
+  background: #eaf4ed;
+  color: #39714e;
+}
+
+.management-summary-card span {
+  display: block;
+  margin-bottom: 5px;
+  color: #8a938d;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.management-summary-card strong {
+  display: block;
+  color: #1b251f;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.management-content {
+  padding-top: 28px;
+}
+
+.management-filters {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.management-filter {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid #e1e6e3;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #59635d;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.management-filter > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.management-filter svg {
+  color: #87918b;
+}
+
+.management-filter span {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.management-filter strong {
+  min-width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px;
+  border-radius: 7px;
+  background: #f1f4f2;
+  color: #68736c;
+  font-size: 11px;
+}
+
+.management-filter:hover {
+  border-color: #bfd0c4;
+  color: #315f45;
+}
+
+.management-filter.active {
+  border-color: #315f45;
+  background: #f1f6f2;
+  color: #315f45;
+}
+
+.management-filter.active svg {
+  color: #315f45;
+}
+
+.management-filter.active strong {
+  background: #315f45;
+  color: #ffffff;
+}
+
+/* =========================================================
+   PERIOD FILTER
+   ========================================================= */
+
+.management-period-filter {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 25px;
+  padding: 17px;
+  border: 1px solid #e1e6e3;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.management-date-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.management-date-field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #69736d;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.management-date-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.management-date-input svg {
+  position: absolute;
+  left: 13px;
+  color: #7d8781;
+  pointer-events: none;
+}
+
+.management-date-input input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 13px 0 39px;
+  border: 1px solid #e1e6e3;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #273029;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.management-date-input input:focus {
+  border-color: #315f45;
+  box-shadow: 0 0 0 3px rgba(49, 95, 69, 0.07);
+}
+
+.management-clear-date {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 14px;
+  border: 1px solid #e1e6e3;
+  border-radius: 9px;
+  background: #f7f9f8;
+  color: #68736c;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.management-clear-date:hover {
+  border-color: #c3d1c7;
+  color: #315f45;
+}
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.management-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.management-card {
+  padding: 19px;
+  border: 1px solid #e1e6e3;
+  border-radius: 14px;
+  background: #ffffff;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.management-card:hover {
+  transform: translateY(-2px);
+  border-color: #d0dcd4;
+  box-shadow: 0 10px 24px rgba(30, 50, 38, 0.055);
+}
+
+.management-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid #edf0ee;
+}
+
+.management-card-main {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.management-card-icon {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: #edf4ef;
+  color: #315f45;
+}
+
+.management-card-title {
+  min-width: 0;
+}
+
+.management-card-title span {
+  display: block;
+  margin-bottom: 5px;
+  color: #929b95;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.management-card-title h3 {
+  margin: 0;
+  color: #1c241f;
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.management-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 7px 9px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.management-status.status-planejado {
+  background: #f4f1e4;
+  color: #75672d;
+}
+
+.management-status.status-em-andamento {
+  background: #edf2f4;
+  color: #4f6870;
+}
+
+.management-status.status-concluido {
+  background: #eaf4ed;
+  color: #39714e;
+}
+
+.management-status:not(
+  .status-planejado,
+  .status-em-andamento,
+  .status-concluido
+) {
+  background: #f1f3f2;
+  color: #69736d;
+}
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.management-card-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 20px;
+  padding-top: 17px;
+}
+
+.management-info-item {
+  min-width: 0;
+}
+
+.management-info-item span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+  color: #8b948e;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.management-info-item span svg {
+  flex-shrink: 0;
+}
+
+.management-info-item strong {
+  display: block;
+  overflow: hidden;
+  color: #303a33;
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.management-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  padding: 40px 20px;
+  border: 1px dashed #d8dfdb;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.management-empty-icon {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  border-radius: 16px;
+  background: #edf4ef;
+  color: #315f45;
+}
+
+.management-empty h3 {
+  margin: 0 0 7px;
+  color: #28312b;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.management-empty p {
+  max-width: 390px;
+  margin: 0;
+  color: #8a938d;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.management-footer {
+  max-width: 1180px;
+  margin: 55px auto 0;
+  padding-top: 22px;
+  border-top: 1px solid #e1e6e3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.management-footer > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.management-footer span {
+  color: #8a938d;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.management-footer strong {
+  color: #536058;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+  .management-page {
+    padding: 24px;
+  }
+
+  .management-hero {
+    padding: 36px;
+  }
+
+  .management-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .management-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .management-page {
+    padding: 20px 18px 28px;
+  }
+
+  .management-hero {
+    min-height: 250px;
+    padding: 30px;
+  }
+
+  .management-hero-icon {
+    width: 110px;
+    height: 110px;
+  }
+
+  .management-hero-floating {
+    right: -18px;
+  }
+
+  .management-filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .management-period-filter {
+    flex-wrap: wrap;
+  }
+
+  .management-date-field {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .management-clear-date {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .management-page {
+    padding: 16px 14px 24px;
+  }
+
+  .management-back {
+    margin-bottom: 17px;
+  }
+
+  .management-hero {
+    min-height: auto;
+    padding: 27px 23px;
+    border-radius: 17px;
+  }
+
+  .management-hero h1 {
+    font-size: 31px;
+  }
+
+  .management-hero p {
+    font-size: 13px;
+  }
+
+  .management-hero-icon {
+    display: none;
+  }
+
+  .management-overview {
+    padding-top: 34px;
+  }
+
+  .management-summary {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .management-summary-card {
+    min-height: 88px;
+    padding: 13px;
+    gap: 10px;
+  }
+
+  .management-summary-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .management-summary-card span {
+    font-size: 10px;
+  }
+
+  .management-summary-card strong {
+    font-size: 21px;
+  }
+
+  .management-filters {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .management-filter {
+    min-height: 51px;
+    padding: 9px 10px;
+  }
+
+  .management-filter span {
+    font-size: 11px;
+  }
+
+  .management-period-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 11px;
+    padding: 14px;
+  }
+
+  .management-date-field {
+    width: 100%;
+  }
+
+  .management-clear-date {
+    width: 100%;
+  }
+
+  .management-card {
+    padding: 16px;
+  }
+
+  .management-card-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .management-status {
+    align-self: flex-start;
+  }
+
+  .management-card-info {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .management-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 380px) {
+  .management-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .management-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .management-hero h1 {
+    font-size: 28px;
+  }
+}
