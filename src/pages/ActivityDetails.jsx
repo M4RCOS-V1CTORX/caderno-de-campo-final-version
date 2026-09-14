@@ -31,6 +31,7 @@ import { getPlotById } from "../services/plotService";
 import { getPhotosByActivity } from "../services/photoService";
 import { getProductById } from "../services/productService";
 import { getCultures } from "../services/cultureService";
+import { supabase } from "../services/supabase";
 
 import "../styles/activityDetails.css";
 
@@ -43,73 +44,71 @@ function ActivityDetails({ activity, onBack, onEdit }) {
   const [cultureData, setCultureData] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  /*
+  /**
    * =========================================================
-   * CARREGAR TODOS OS DADOS RELACIONADOS
+   * CARREGAR DADOS DA ATIVIDADE
    * =========================================================
    */
+
   useEffect(() => {
     let mounted = true;
 
     async function loadDetails() {
       try {
-        /*
-         * -----------------------------------------------------
-         * PROPRIEDADE
-         * -----------------------------------------------------
-         */
         let propertyResult = null;
+        let plotResult = null;
+        let photosResult = [];
+        let productResult = null;
+        let foundCulture = null;
+
+        /**
+         * PROPRIEDADE
+         */
 
         if (activity?.propertyId) {
-          propertyResult = await getPropertyById(activity.propertyId);
+          propertyResult = await getPropertyById(
+            activity.propertyId
+          );
         }
 
-        /*
-         * -----------------------------------------------------
+        /**
          * TALHÃO
-         * -----------------------------------------------------
          */
-        let plotResult = null;
 
         if (activity?.plotId) {
-          plotResult = await getPlotById(activity.plotId);
+          plotResult = await getPlotById(
+            activity.plotId
+          );
         }
 
-        /*
-         * -----------------------------------------------------
+        /**
          * FOTOS
-         * -----------------------------------------------------
          */
-        let photosResult = [];
 
         if (activity?.id) {
-          photosResult = await getPhotosByActivity(activity.id);
+          photosResult = await getPhotosByActivity(
+            activity.id
+          );
         }
 
-        /*
-         * -----------------------------------------------------
+        console.log(
+          "📸 Fotos encontradas:",
+          photosResult
+        );
+
+        /**
          * PRODUTO
-         * -----------------------------------------------------
          */
-        let productResult = null;
 
         if (activity?.productId) {
-          productResult = await getProductById(activity.productId);
+          productResult = await getProductById(
+            activity.productId
+          );
         }
 
-        /*
-         * -----------------------------------------------------
+        /**
          * CULTURA
-         *
-         * A cultura do registro vem do talhão.
-         *
-         * Exemplo:
-         * plot.culture = "Milho"
-         *
-         * Depois procuramos "Milho" dentro da tabela cultures.
-         * -----------------------------------------------------
          */
-        let foundCulture = null;
 
         try {
           const culturesResult = await getCultures();
@@ -122,42 +121,49 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               "";
 
             if (cultureName) {
-              const normalizedCultureName = String(cultureName)
+              const normalizedCultureName = String(
+                cultureName
+              )
                 .trim()
                 .toLowerCase();
 
               foundCulture =
                 culturesResult.find((culture) => {
-                  const name = String(culture?.name || "")
+                  const name = String(
+                    culture?.name || ""
+                  )
                     .trim()
                     .toLowerCase();
 
-                  return name === normalizedCultureName;
+                  return (
+                    name === normalizedCultureName
+                  );
                 }) || null;
             }
           }
-        } catch (cultureError) {
+        } catch (error) {
           console.error(
-            "ERRO AO CARREGAR CULTURA:",
-            cultureError
+            "❌ Erro ao carregar cultura:",
+            error
           );
         }
 
-        /*
-         * -----------------------------------------------------
-         * ATUALIZAR ESTADOS SOMENTE DEPOIS DE TUDO CARREGADO
-         * -----------------------------------------------------
-         */
         if (!mounted) return;
 
         setProperty(propertyResult || null);
         setPlot(plotResult || null);
-        setPhotos(Array.isArray(photosResult) ? photosResult : []);
+
+        setPhotos(
+          Array.isArray(photosResult)
+            ? photosResult
+            : []
+        );
+
         setProductData(productResult || null);
         setCultureData(foundCulture || null);
       } catch (error) {
         console.error(
-          "ERRO AO CARREGAR DETALHES DA ATIVIDADE:",
+          "❌ ERRO AO CARREGAR DETALHES:",
           error
         );
 
@@ -178,29 +184,131 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     };
   }, [activity]);
 
-  /*
+  /**
    * =========================================================
    * CRIAR URL DAS FOTOS
    * =========================================================
+   *
+   * LOCAL:
+   * IndexedDB
+   *
+   * ONLINE:
+   * Supabase Storage
+   *
+   * O resultado sempre será:
+   *
+   * {
+   *   id: "...",
+   *   url: "blob:..."
+   * }
+   *
+   * =========================================================
    */
+
   useEffect(() => {
     let mounted = true;
-    const urls = [];
+
+    const objectUrls = [];
 
     async function createPhotoUrls() {
       try {
-        for (const photo of photos) {
-          if (!photo?.file) continue;
+        const loadedPhotos = [];
 
-          const url = URL.createObjectURL(photo.file);
-          urls.push(url);
+        for (const photo of photos) {
+          if (photo?.deleted) continue;
+
+          /**
+           * FOTO LOCAL
+           */
+
+          if (photo?.file) {
+            const localBlob =
+              photo.file instanceof Blob
+                ? photo.file
+                : new Blob([photo.file], {
+                    type: photo.type || "image/jpeg",
+                  });
+
+            const url = URL.createObjectURL(
+              localBlob
+            );
+
+            objectUrls.push(url);
+
+            loadedPhotos.push({
+              id:
+                photo.uuid ||
+                photo.id ||
+                `photo-${Date.now()}`,
+              url,
+            });
+
+            console.log(
+              "✅ Foto local carregada:",
+              photo.id
+            );
+
+            continue;
+          }
+
+          /**
+           * FOTO DO SUPABASE
+           */
+
+          if (photo?.storagePath) {
+            console.log(
+              "📥 Baixando foto:",
+              photo.storagePath
+            );
+
+            const { data, error } =
+              await supabase.storage
+                .from("activity-photos")
+                .download(photo.storagePath);
+
+            if (error) {
+              console.error(
+                "❌ Erro ao baixar foto:",
+                error
+              );
+
+              continue;
+            }
+
+            if (data) {
+              const url =
+                URL.createObjectURL(data);
+
+              objectUrls.push(url);
+
+              loadedPhotos.push({
+                id:
+                  photo.uuid ||
+                  photo.id ||
+                  `photo-${Date.now()}`,
+                url,
+              });
+
+              console.log(
+                "✅ Foto do Supabase carregada!"
+              );
+            }
+          }
         }
 
         if (mounted) {
-          setPhotoUrls(urls);
+          console.log(
+            "🖼️ URLs finais:",
+            loadedPhotos
+          );
+
+          setPhotoUrls(loadedPhotos);
         }
       } catch (error) {
-        console.error("ERRO AO CARREGAR FOTOS:", error);
+        console.error(
+          "❌ ERRO AO CRIAR URLs DAS FOTOS:",
+          error
+        );
 
         if (mounted) {
           setPhotoUrls([]);
@@ -213,17 +321,18 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     return () => {
       mounted = false;
 
-      urls.forEach((url) => {
+      objectUrls.forEach((url) => {
         URL.revokeObjectURL(url);
       });
     };
   }, [photos]);
 
-  /*
+  /**
    * =========================================================
    * TECLADO DA GALERIA
    * =========================================================
    */
+
   useEffect(() => {
     function handleKeyDown(event) {
       if (selectedPhoto === null) return;
@@ -233,67 +342,88 @@ function ActivityDetails({ activity, onBack, onEdit }) {
       }
 
       if (event.key === "ArrowLeft") {
-        handlePreviousPhoto();
+        setSelectedPhoto((current) => {
+          if (current === 0) {
+            return photoUrls.length - 1;
+          }
+
+          return current - 1;
+        });
       }
 
       if (event.key === "ArrowRight") {
-        handleNextPhoto();
+        setSelectedPhoto((current) => {
+          if (
+            current ===
+            photoUrls.length - 1
+          ) {
+            return 0;
+          }
+
+          return current + 1;
+        });
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
   }, [selectedPhoto, photoUrls.length]);
 
-  /*
+  /**
    * =========================================================
    * FORMATAR DATA
    * =========================================================
    */
+
   function formatDate(date) {
     if (!date) {
       return "Não informado";
     }
 
     try {
-      /*
-       * Datas do input type="date" vêm como:
-       * YYYY-MM-DD
-       *
-       * Criar diretamente com new Date("YYYY-MM-DD")
-       * pode gerar problemas de fuso horário.
-       *
-       * Por isso tratamos esse formato separadamente.
-       */
       if (
         typeof date === "string" &&
         /^\d{4}-\d{2}-\d{2}$/.test(date)
       ) {
-        const [year, month, day] = date.split("-");
+        const [year, month, day] =
+          date.split("-");
 
         return `${day}/${month}/${year}`;
       }
 
       const parsedDate = new Date(date);
 
-      if (Number.isNaN(parsedDate.getTime())) {
+      if (
+        Number.isNaN(
+          parsedDate.getTime()
+        )
+      ) {
         return "Não informado";
       }
 
-      return parsedDate.toLocaleDateString("pt-BR");
+      return parsedDate.toLocaleDateString(
+        "pt-BR"
+      );
     } catch {
       return "Não informado";
     }
   }
 
-  /*
+  /**
    * =========================================================
    * STATUS
    * =========================================================
    */
+
   function normalizeStatus(status) {
     if (!status) {
       return "Não informado";
@@ -306,8 +436,8 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     if (
       normalized === "concluida" ||
       normalized === "concluído" ||
-      normalized === "concluida" ||
-      normalized === "concluído"
+      normalized === "concluída" ||
+      normalized === "concluido"
     ) {
       return "Concluído";
     }
@@ -339,11 +469,12 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     return status;
   }
 
-  /*
+  /**
    * =========================================================
-   * QUANTIDADE DO PRODUTO
+   * QUANTIDADE
    * =========================================================
    */
+
   function getProductQuantity() {
     if (!activity) {
       return "Não informado";
@@ -372,11 +503,12 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     return "Não informado";
   }
 
-  /*
+  /**
    * =========================================================
    * CULTURA
    * =========================================================
    */
+
   function getCultureName() {
     return (
       cultureData?.name ||
@@ -387,11 +519,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     );
   }
 
-  /*
-   * =========================================================
-   * VARIEDADE
-   * =========================================================
-   */
   function getCultureVariety() {
     return (
       cultureData?.variety ||
@@ -401,17 +528,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     );
   }
 
-  /*
-   * =========================================================
-   * CICLO
-   *
-   * Aceita os formatos:
-   * cycle
-   * ciclo
-   * activity.cycle
-   * activity.ciclo
-   * =========================================================
-   */
   function getCultureCycle() {
     return (
       cultureData?.cycle ||
@@ -422,11 +538,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     );
   }
 
-  /*
-   * =========================================================
-   * ÁREA
-   * =========================================================
-   */
   function getPlotArea() {
     if (
       plot?.area !== undefined &&
@@ -447,11 +558,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     return "Não informado";
   }
 
-  /*
-   * =========================================================
-   * SOLO
-   * =========================================================
-   */
   function getPlotSoil() {
     return (
       plot?.soil ||
@@ -461,26 +567,22 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     );
   }
 
-  /*
-   * =========================================================
-   * PRODUTO EXISTE?
-   * =========================================================
-   */
   function hasProduct() {
     return Boolean(
       activity?.productId ||
-      activity?.product ||
-      productData
+        activity?.product ||
+        productData
     );
   }
 
-  /*
+  /**
    * =========================================================
-   * FOTOS
+   * GALERIA
    * =========================================================
    */
+
   function openPhoto(index) {
-    if (!photoUrls[index]) return;
+    if (!photoUrls[index]?.url) return;
 
     setSelectedPhoto(index);
   }
@@ -515,7 +617,10 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     }
 
     setSelectedPhoto((current) => {
-      if (current === photoUrls.length - 1) {
+      if (
+        current ===
+        photoUrls.length - 1
+      ) {
         return 0;
       }
 
@@ -523,11 +628,12 @@ function ActivityDetails({ activity, onBack, onEdit }) {
     });
   }
 
-  /*
+  /**
    * =========================================================
-   * REGISTRO NÃO EXISTE
+   * REGISTRO NÃO ENCONTRADO
    * =========================================================
    */
+
   if (!activity) {
     return (
       <main className="activity-details">
@@ -536,11 +642,13 @@ function ActivityDetails({ activity, onBack, onEdit }) {
             <FileText size={26} />
           </div>
 
-          <h2>Registro não encontrado</h2>
+          <h2>
+            Registro não encontrado
+          </h2>
 
           <p>
-            Não foi possível carregar os dados deste
-            registro.
+            Não foi possível carregar os dados
+            deste registro.
           </p>
 
           <button
@@ -562,9 +670,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
   return (
     <main className="activity-details">
-      {/* =====================================================
-          VOLTAR
-      ===================================================== */}
       <button
         type="button"
         className="details-back-button"
@@ -574,9 +679,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
         Voltar para atividades
       </button>
 
-      {/* =====================================================
-          HERO
-      ===================================================== */}
       <section className="details-hero">
         <div className="details-hero-glow" />
 
@@ -587,7 +689,8 @@ function ActivityDetails({ activity, onBack, onEdit }) {
           </div>
 
           <h1>
-            {activity.title || "Registro sem título"}
+            {activity.title ||
+              "Registro sem título"}
           </h1>
 
           <p>
@@ -603,7 +706,8 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
             <span>
               <MapPin size={15} />
-              {activity.location || "Local não informado"}
+              {activity.location ||
+                "Local não informado"}
             </span>
           </div>
         </div>
@@ -613,21 +717,28 @@ function ActivityDetails({ activity, onBack, onEdit }) {
             <span className="details-status-dot" />
 
             <div>
-              <small>STATUS DO REGISTRO</small>
-              <strong>Registro salvo</strong>
+              <small>
+                STATUS DO REGISTRO
+              </small>
+
+              <strong>
+                Registro salvo
+              </strong>
             </div>
           </div>
 
           <div className="details-responsible">
-            <span>RESPONSÁVEL TÉCNICA</span>
-            <strong>Laís L. Andrade</strong>
+            <span>
+              RESPONSÁVEL TÉCNICA
+            </span>
+
+            <strong>
+              Laís L. Andrade
+            </strong>
           </div>
         </div>
       </section>
 
-      {/* =====================================================
-          RESUMO
-      ===================================================== */}
       <section className="details-summary">
         <div className="summary-item">
           <div className="summary-icon">
@@ -635,8 +746,13 @@ function ActivityDetails({ activity, onBack, onEdit }) {
           </div>
 
           <div>
-            <span>Data do registro</span>
-            <strong>{formatDate(activity.date)}</strong>
+            <span>
+              Data do registro
+            </span>
+
+            <strong>
+              {formatDate(activity.date)}
+            </strong>
           </div>
         </div>
 
@@ -647,8 +763,10 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
           <div>
             <span>Local</span>
+
             <strong>
-              {activity.location || "Não informado"}
+              {activity.location ||
+                "Não informado"}
             </strong>
           </div>
         </div>
@@ -660,15 +778,13 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
           <div>
             <span>Status</span>
+
             <strong>{status}</strong>
           </div>
         </div>
       </section>
 
       <div className="details-layout">
-        {/* ===================================================
-            CAMPO / CULTURA
-        =================================================== */}
         <section className="details-card details-card-wide">
           <div className="details-card-header">
             <div className="details-card-title">
@@ -677,14 +793,18 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               </div>
 
               <div>
-                <span>INFORMAÇÕES DO CAMPO</span>
-                <h2>Localização e cultura</h2>
+                <span>
+                  INFORMAÇÕES DO CAMPO
+                </span>
+
+                <h2>
+                  Localização e cultura
+                </h2>
               </div>
             </div>
           </div>
 
           <div className="details-grid">
-            {/* PROPRIEDADE */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <Building2 size={17} />
@@ -694,12 +814,12 @@ function ActivityDetails({ activity, onBack, onEdit }) {
                 <span>Propriedade</span>
 
                 <strong>
-                  {property?.name || "Não informado"}
+                  {property?.name ||
+                    "Não informado"}
                 </strong>
               </div>
             </div>
 
-            {/* TALHÃO */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <Mountain size={17} />
@@ -709,12 +829,12 @@ function ActivityDetails({ activity, onBack, onEdit }) {
                 <span>Talhão</span>
 
                 <strong>
-                  {plot?.name || "Não informado"}
+                  {plot?.name ||
+                    "Não informado"}
                 </strong>
               </div>
             </div>
 
-            {/* CULTURA */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <Sprout size={17} />
@@ -723,11 +843,12 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               <div>
                 <span>Cultura</span>
 
-                <strong>{getCultureName()}</strong>
+                <strong>
+                  {getCultureName()}
+                </strong>
               </div>
             </div>
 
-            {/* VARIEDADE */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <Leaf size={17} />
@@ -742,7 +863,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               </div>
             </div>
 
-            {/* CICLO */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <Clock3 size={17} />
@@ -757,7 +877,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               </div>
             </div>
 
-            {/* ÁREA */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <Ruler size={17} />
@@ -766,11 +885,12 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               <div>
                 <span>Área</span>
 
-                <strong>{getPlotArea()}</strong>
+                <strong>
+                  {getPlotArea()}
+                </strong>
               </div>
             </div>
 
-            {/* SOLO */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <Layers3 size={17} />
@@ -779,18 +899,21 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               <div>
                 <span>Solo</span>
 
-                <strong>{getPlotSoil()}</strong>
+                <strong>
+                  {getPlotSoil()}
+                </strong>
               </div>
             </div>
 
-            {/* LOCAL */}
             <div className="detail-item">
               <div className="detail-item-icon">
                 <MapPin size={17} />
               </div>
 
               <div>
-                <span>Local do registro</span>
+                <span>
+                  Local do registro
+                </span>
 
                 <strong>
                   {activity.location ||
@@ -801,9 +924,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
           </div>
         </section>
 
-        {/* ===================================================
-            MANEJO
-        =================================================== */}
         <section className="details-card">
           <div className="details-card-header">
             <div className="details-card-title">
@@ -813,14 +933,19 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
               <div>
                 <span>MANEJO</span>
-                <h2>Informações do manejo</h2>
+
+                <h2>
+                  Informações do manejo
+                </h2>
               </div>
             </div>
           </div>
 
           <div className="details-list">
             <div className="details-list-row">
-              <span>Tipo de manejo</span>
+              <span>
+                Tipo de manejo
+              </span>
 
               <strong>
                 {activity.managementType ||
@@ -837,7 +962,9 @@ function ActivityDetails({ activity, onBack, onEdit }) {
             </div>
 
             <div className="details-list-row">
-              <span>Data planejada</span>
+              <span>
+                Data planejada
+              </span>
 
               <strong>
                 {formatDate(
@@ -848,7 +975,9 @@ function ActivityDetails({ activity, onBack, onEdit }) {
             </div>
 
             <div className="details-list-row">
-              <span>Data de conclusão</span>
+              <span>
+                Data de conclusão
+              </span>
 
               <strong>
                 {formatDate(
@@ -860,9 +989,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
           </div>
         </section>
 
-        {/* ===================================================
-            PRAGAS / DOENÇAS
-        =================================================== */}
         <section className="details-card">
           <div className="details-card-header">
             <div className="details-card-title">
@@ -872,14 +998,19 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
               <div>
                 <span>OCORRÊNCIAS</span>
-                <h2>Pragas e doenças</h2>
+
+                <h2>
+                  Pragas e doenças
+                </h2>
               </div>
             </div>
           </div>
 
           <div className="details-list">
             <div className="details-list-row">
-              <span>Praga identificada</span>
+              <span>
+                Praga identificada
+              </span>
 
               <strong>
                 {activity.pest ||
@@ -888,7 +1019,9 @@ function ActivityDetails({ activity, onBack, onEdit }) {
             </div>
 
             <div className="details-list-row">
-              <span>Doença identificada</span>
+              <span>
+                Doença identificada
+              </span>
 
               <strong>
                 {activity.disease ||
@@ -898,9 +1031,6 @@ function ActivityDetails({ activity, onBack, onEdit }) {
           </div>
         </section>
 
-        {/* ===================================================
-            PRODUTO
-        =================================================== */}
         <section className="details-card">
           <div className="details-card-header">
             <div className="details-card-title">
@@ -910,7 +1040,10 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
               <div>
                 <span>INSUMO</span>
-                <h2>Produto utilizado</h2>
+
+                <h2>
+                  Produto utilizado
+                </h2>
               </div>
             </div>
           </div>
@@ -937,7 +1070,9 @@ function ActivityDetails({ activity, onBack, onEdit }) {
                 <Scale size={17} />
 
                 <div>
-                  <span>QUANTIDADE</span>
+                  <span>
+                    QUANTIDADE
+                  </span>
 
                   <strong>
                     {getProductQuantity()}
@@ -950,16 +1085,13 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               <Package size={20} />
 
               <span>
-                Nenhum produto foi associado a este
-                registro.
+                Nenhum produto foi associado
+                a este registro.
               </span>
             </div>
           )}
         </section>
 
-        {/* ===================================================
-            OBSERVAÇÕES
-        =================================================== */}
         <section className="details-card details-card-wide">
           <div className="details-card-header">
             <div className="details-card-title">
@@ -969,6 +1101,7 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
               <div>
                 <span>REGISTRO</span>
+
                 <h2>Observações</h2>
               </div>
             </div>
@@ -976,23 +1109,26 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
           <div className="details-description">
             {activity.description ? (
-              <p>{activity.description}</p>
+              <p>
+                {activity.description}
+              </p>
             ) : (
               <div className="details-no-data">
                 <FileText size={20} />
 
                 <span>
-                  Nenhuma observação foi adicionada a
-                  este registro.
+                  Nenhuma observação foi adicionada
+                  a este registro.
                 </span>
               </div>
             )}
           </div>
         </section>
 
-        {/* ===================================================
+        {/* =====================================================
             FOTOS
-        =================================================== */}
+        ===================================================== */}
+
         <section className="details-card details-card-wide">
           <div className="details-card-header">
             <div className="details-card-title">
@@ -1002,6 +1138,7 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
               <div>
                 <span>REGISTRO VISUAL</span>
+
                 <h2>Fotos do campo</h2>
               </div>
             </div>
@@ -1016,25 +1153,29 @@ function ActivityDetails({ activity, onBack, onEdit }) {
 
           {photoUrls.length > 0 ? (
             <div className="details-photo-grid">
-              {photoUrls.map((url, index) => (
-                <button
-                  type="button"
-                  className="details-photo"
-                  key={`${url}-${index}`}
-                  onClick={() => openPhoto(index)}
-                >
-                  <img
-                    src={url}
-                    alt={`Foto do registro ${
-                      index + 1
-                    }`}
-                  />
+              {photoUrls.map(
+                (photo, index) => (
+                  <button
+                    type="button"
+                    className="details-photo"
+                    key={photo.id}
+                    onClick={() =>
+                      openPhoto(index)
+                    }
+                  >
+                    <img
+                      src={photo.url}
+                      alt={`Foto do registro ${
+                        index + 1
+                      }`}
+                    />
 
-                  <span className="photo-overlay">
-                    <ImageIcon size={20} />
-                  </span>
-                </button>
-              ))}
+                    <span className="photo-overlay">
+                      <ImageIcon size={20} />
+                    </span>
+                  </button>
+                )
+              )}
             </div>
           ) : (
             <div className="details-no-photos">
@@ -1060,6 +1201,7 @@ function ActivityDetails({ activity, onBack, onEdit }) {
       {/* =====================================================
           AÇÕES
       ===================================================== */}
+
       <div className="details-actions">
         <button
           type="button"
@@ -1073,7 +1215,9 @@ function ActivityDetails({ activity, onBack, onEdit }) {
         <button
           type="button"
           className="details-primary-button"
-          onClick={() => onEdit(activity)}
+          onClick={() =>
+            onEdit(activity)
+          }
         >
           <Pencil size={17} />
           Editar registro
@@ -1084,23 +1228,35 @@ function ActivityDetails({ activity, onBack, onEdit }) {
       {/* =====================================================
           FOOTER
       ===================================================== */}
+
       <footer className="details-footer">
         <div>
-          <strong>CADERNO DE CAMPO</strong>
-          <span>Gestão agrícola inteligente</span>
+          <strong>
+            CADERNO DE CAMPO
+          </strong>
+
+          <span>
+            Gestão agrícola inteligente
+          </span>
         </div>
 
         <div className="details-footer-responsible">
-          <span>RESPONSÁVEL TÉCNICA</span>
-          <strong>Laís L. Andrade</strong>
+          <span>
+            RESPONSÁVEL TÉCNICA
+          </span>
+
+          <strong>
+            Laís L. Andrade
+          </strong>
         </div>
       </footer>
 
       {/* =====================================================
           LIGHTBOX
       ===================================================== */}
+
       {selectedPhoto !== null &&
-        photoUrls[selectedPhoto] && (
+        photoUrls[selectedPhoto]?.url && (
           <div
             className="photo-lightbox"
             onClick={closePhoto}
@@ -1138,7 +1294,9 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               }
             >
               <img
-                src={photoUrls[selectedPhoto]}
+                src={
+                  photoUrls[selectedPhoto]?.url
+                }
                 alt={`Foto ${
                   selectedPhoto + 1
                 } do registro`}

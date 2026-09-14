@@ -1,170 +1,189 @@
+
 import Dexie from "dexie";
+
+/**
+ * =========================================================
+ * BANCO LOCAL — CADERNO DE CAMPO
+ * =========================================================
+ *
+ * Estrutura limpa preparada para:
+ *
+ * ✅ Funcionamento offline
+ * ✅ IndexedDB
+ * ✅ Sincronização PC ↔ Celular
+ * ✅ UUID universal
+ * ✅ Supabase
+ * ✅ Fotos no Supabase Storage
+ * ✅ Fotos vinculadas corretamente às atividades
+ *
+ * IMPORTANTE:
+ *
+ * activityId
+ * → ID LOCAL do dispositivo
+ *
+ * activityUuid
+ * → UUID UNIVERSAL usado para sincronização
+ *
+ * Cada dispositivo pode possuir IDs diferentes,
+ * mas o UUID identifica o mesmo registro.
+ *
+ * =========================================================
+ */
 
 const db = new Dexie("CadernoDeCampo");
 
-/*
-=========================================================
-  VERSÃO 1 — ESTRUTURA INICIAL
-=========================================================
-*/
-
-db.version(1).stores({
-  activities:
-    "++id, title, date, location, synced, createdAt",
-
-  properties:
-    "++id, name, owner, city, state, synced, createdAt",
-
-  plots:
-    "++id, propertyId, name, culture, soil, area, synced, createdAt",
-
-  photos:
-    "++id, activityId, createdAt",
-});
-
-/*
-=========================================================
-  VERSÃO 2 — RELAÇÃO ATIVIDADE / PROPRIEDADE / TALHÃO
-=========================================================
-*/
-
-db.version(2).stores({
-  activities:
-    "++id, propertyId, plotId, title, date, location, synced, createdAt",
-
-  properties:
-    "++id, name, owner, city, state, synced, createdAt",
-
-  plots:
-    "++id, propertyId, name, culture, soil, area, synced, createdAt",
-
-  photos:
-    "++id, activityId, createdAt",
-});
-
-/*
-=========================================================
-  VERSÃO 3 — PRODUTOS
-=========================================================
-*/
-
-db.version(3).stores({
-  activities:
-    "++id, propertyId, plotId, title, date, location, synced, createdAt",
-
-  properties:
-    "++id, name, owner, city, state, synced, createdAt",
-
-  plots:
-    "++id, propertyId, name, culture, soil, area, synced, createdAt",
-
-  photos:
-    "++id, activityId, createdAt",
-
-  products:
-    "++id, name, type, unit, synced, createdAt",
-});
-
-/*
-=========================================================
-  VERSÃO 4 — BIBLIOTECA
-=========================================================
-*/
+/**
+ * =========================================================
+ * VERSÃO ATUAL DO BANCO
+ * =========================================================
+ *
+ * Como você não precisa manter os dados antigos,
+ * estamos utilizando uma estrutura única e limpa.
+ */
 
 db.version(4).stores({
+  /**
+   * =========================================================
+   * ATIVIDADES
+   * =========================================================
+   */
+
   activities:
-    "++id, propertyId, plotId, title, date, location, synced, createdAt",
+    "++id, uuid, propertyId, propertyUuid, plotId, plotUuid, title, date, location, synced, createdAt, updatedAt, deleted",
+
+  /**
+   * =========================================================
+   * PROPRIEDADES
+   * =========================================================
+   */
 
   properties:
-    "++id, name, owner, city, state, synced, createdAt",
+    "++id, uuid, name, owner, city, state, synced, createdAt, updatedAt, deleted",
+
+  /**
+   * =========================================================
+   * TALHÕES
+   * =========================================================
+   */
 
   plots:
-    "++id, propertyId, name, culture, soil, area, synced, createdAt",
+    "++id, uuid, propertyId, propertyUuid, name, culture, soil, area, synced, createdAt, updatedAt, deleted",
+
+  /**
+   * =========================================================
+   * FOTOS
+   * =========================================================
+   *
+   * activityId
+   * → ID local da atividade neste dispositivo
+   *
+   * activityUuid
+   * → UUID universal da atividade
+   *
+   * Isso permite que uma foto criada no PC seja
+   * corretamente vinculada à mesma atividade no celular,
+   * mesmo que os IDs locais sejam diferentes.
+   */
 
   photos:
-    "++id, activityId, createdAt",
+    "++id, uuid, activityId, activityUuid, storagePath, createdAt, updatedAt, synced, deleted",
+
+  /**
+   * =========================================================
+   * PRODUTOS
+   * =========================================================
+   */
 
   products:
-    "++id, name, type, unit, synced, createdAt",
+    "++id, uuid, name, type, unit, synced, createdAt, updatedAt, deleted",
+
+  /**
+   * =========================================================
+   * BIBLIOTECA
+   * =========================================================
+   */
 
   library:
-    "++id, name, type, description, unit, synced, createdAt",
+    "++id, uuid, name, type, description, unit, synced, createdAt, updatedAt, deleted",
+
+  /**
+   * =========================================================
+   * PRAGAS
+   * =========================================================
+   */
 
   pests:
-    "++id, name, type, description, synced, createdAt",
+    "++id, uuid, name, type, description, synced, createdAt, updatedAt, deleted",
+
+  /**
+   * =========================================================
+   * DOENÇAS
+   * =========================================================
+   */
 
   diseases:
-    "++id, name, type, description, synced, createdAt",
-});
+    "++id, uuid, name, type, description, synced, createdAt, updatedAt, deleted",
 
-/*
-=========================================================
-  VERSÃO 5 — CULTURAS
-=========================================================
-*/
-
-db.version(5).stores({
-  activities:
-    "++id, propertyId, plotId, title, date, location, synced, createdAt",
-
-  properties:
-    "++id, name, owner, city, state, synced, createdAt",
-
-  plots:
-    "++id, propertyId, name, culture, soil, area, synced, createdAt",
-
-  photos:
-    "++id, activityId, createdAt",
-
-  products:
-    "++id, name, type, unit, synced, createdAt",
-
-  pests:
-    "++id, name, type, description, synced, createdAt",
-
-  diseases:
-    "++id, name, type, description, synced, createdAt",
+  /**
+   * =========================================================
+   * CULTURAS
+   * =========================================================
+   */
 
   cultures:
-    "++id, name, scientificName, description, synced, createdAt",
-});
+    "++id, uuid, name, scientificName, description, synced, createdAt, updatedAt, deleted",
 
-/*
-=========================================================
-  VERSÃO 6 — PEDIDOS
-=========================================================
-*/
-
-db.version(6).stores({
-  activities:
-    "++id, propertyId, plotId, title, date, location, synced, createdAt",
-
-  properties:
-    "++id, name, owner, city, state, synced, createdAt",
-
-  plots:
-    "++id, propertyId, name, culture, soil, area, synced, createdAt",
-
-  photos:
-    "++id, activityId, createdAt",
-
-  products:
-    "++id, name, type, unit, synced, createdAt",
-
-  library:
-    "++id, name, type, description, unit, synced, createdAt",
-
-  pests:
-    "++id, name, type, description, synced, createdAt",
-
-  diseases:
-    "++id, name, type, description, synced, createdAt",
-
-  cultures:
-    "++id, name, scientificName, description, synced, createdAt",
+  /**
+   * =========================================================
+   * PEDIDOS
+   * =========================================================
+   */
 
   orders:
-    "++id, customer, date, status, total, synced, createdAt",
+    "++id, uuid, customer, date, status, total, synced, createdAt, updatedAt, deleted",
 });
+
+
+/**
+ * =========================================================
+ * VERSÃO 6 — MIGRAÇÃO SEGURA PARA MOBILE
+ * =========================================================
+ *
+ * Não fazemos conversões assíncronas de Blob/File dentro do
+ * upgrade do IndexedDB. Alguns navegadores móveis encerram a
+ * transação enquanto uma Promise de Blob está pendente, deixando
+ * o banco em DatabaseClosedError.
+ *
+ * A conversão das fotos é feita pelo photoService/syncService,
+ * fora da migração do banco.
+ */
+db.version(6).stores({
+  activities:
+    "++id, uuid, propertyId, propertyUuid, plotId, plotUuid, title, date, location, synced, createdAt, updatedAt, deleted",
+  properties:
+    "++id, uuid, name, owner, city, state, synced, createdAt, updatedAt, deleted",
+  plots:
+    "++id, uuid, propertyId, propertyUuid, name, culture, soil, area, synced, createdAt, updatedAt, deleted",
+  photos:
+    "++id, uuid, activityId, activityUuid, storagePath, createdAt, updatedAt, synced, deleted",
+  products:
+    "++id, uuid, name, type, unit, synced, createdAt, updatedAt, deleted",
+  library:
+    "++id, uuid, name, type, description, unit, synced, createdAt, updatedAt, deleted",
+  pests:
+    "++id, uuid, name, type, description, synced, createdAt, updatedAt, deleted",
+  diseases:
+    "++id, uuid, name, type, description, synced, createdAt, updatedAt, deleted",
+  cultures:
+    "++id, uuid, name, scientificName, description, synced, createdAt, updatedAt, deleted",
+  orders:
+    "++id, uuid, customer, date, status, total, synced, createdAt, updatedAt, deleted",
+});
+
+/**
+ * =========================================================
+ * EXPORTAÇÃO
+ * =========================================================
+ */
 
 export default db;

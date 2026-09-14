@@ -414,15 +414,16 @@ function NewActivity({
   ========================================================= */
 
   function handlePropertyChange(event) {
-    const value = event.target.value;
+  const value = event.target.value;
 
-    setPropertyId(value);
-    setPlotId("");
-   setSelectedCulture(
-  activityToEdit.culture ||
-  ""
-);
-  }
+  setPropertyId(value);
+
+  // Ao trocar de propriedade, limpa o talhão selecionado
+  setPlotId("");
+
+  // Limpa a cultura até que um novo talhão seja selecionado
+  setSelectedCulture("");
+}
 
   /* =========================================================
      PRODUTO
