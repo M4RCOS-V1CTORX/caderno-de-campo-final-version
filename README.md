@@ -56,3 +56,14 @@ npm run build
 ### Observação de segurança
 
 Esta versão usa acesso `anon` porque o sistema foi projetado para um único usuário e simplicidade de implantação. Para um produto multiusuário, a próxima evolução deve ser autenticação e RLS por usuário.
+
+## Identidade e experiência instalada
+
+- Nome do aplicativo/PWA: **Caderno de Campo**.
+- Título da janela e aba: **Caderno de Campo**.
+- Ícone profissional do aplicativo em 192x192 e 512x512, com versões menores para favicon e iOS.
+- Manifesto PWA atualizado para instalação em celular e desktop.
+- Layout desktop ampliado para aproveitar praticamente toda a largura da janela, mantendo margens confortáveis.
+- Cache do Service Worker incrementado para `v4`, permitindo que a nova identidade visual seja reconhecida nas atualizações.
+
+> Se uma instalação antiga continuar mostrando `caderno-de-campo`, remova essa instalação antiga e instale novamente a aplicação para forçar a atualização do nome e do ícone.

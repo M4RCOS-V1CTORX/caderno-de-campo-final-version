@@ -1,14 +1,18 @@
 {
+  "id": "/",
   "name": "Caderno de Campo",
   "short_name": "Caderno de Campo",
-  "description": "Sistema de gestão e registro de atividades de campo agrícola.",
+  "description": "Gestão agrícola inteligente para propriedades, atividades, talhões, estoque e pedidos.",
   "lang": "pt-BR",
+  "dir": "ltr",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "orientation": "any",
-  "background_color": "#f5f6f3",
-  "theme_color": "#315f45",
+  "background_color": "#eef2ef",
+  "theme_color": "#0f6f3b",
+  "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
       "src": "/icons/icon-192.png",

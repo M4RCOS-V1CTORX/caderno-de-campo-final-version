@@ -109,3 +109,23 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* =========================================================
+   CADERNO DE CAMPO — BASE GLOBAL DE APLICAÇÃO
+   O layout ocupa praticamente toda a janela no desktop.
+   ========================================================= */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+}
+
+#root {
+  max-width: none;
+  margin: 0;
+  border-inline: 0;
+  min-height: 100svh;
+  text-align: initial;
+}

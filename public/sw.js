@@ -1,4 +1,4 @@
-const CACHE_NAME = 'caderno-de-campo-v3';
+const CACHE_NAME = 'caderno-de-campo-v4';
 
 const APP_SHELL = [
   '/',
@@ -6,7 +6,10 @@ const APP_SHELL = [
   '/manifest.webmanifest',
   '/favicon.svg',
   '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  '/icons/icon-512.png',
+  '/icons/icon-180.png',
+  '/icons/icon-48.png',
+  '/icons/icon-32.png'
 ];
 
 self.addEventListener('install', (event) => {
