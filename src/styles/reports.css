@@ -1805,24 +1805,16 @@ IMPRESSÃO DOS TIPOS
 
 
 /* =========================================================
-   CORREÇÃO FINAL DO PDF
-   Modelo baseado no PDF de referência da cliente
-   NÃO ALTERA O SISTEMA — SOMENTE A IMPRESSÃO
+   PDF / IMPRESSÃO — VERSÃO FINAL
+   O layout da tela permanece intacto.
+   Estas regras existem somente para o PDF/Impressão.
 ========================================================= */
-
-/* =========================================================
-   IMPRESSÃO / PDF — CADERNO DE CAMPO
-   ========================================================= */
 
 @media print {
 
-  /* ---------------------------------------------------------
-     CONFIGURAÇÃO DA PÁGINA
-     --------------------------------------------------------- */
-
   @page {
     size: A4 portrait;
-    margin: 12mm 12mm 14mm 12mm;
+    margin: 12mm 12mm 13mm 12mm;
   }
 
   html,
@@ -1832,7 +1824,7 @@ IMPRESSÃO DOS TIPOS
     margin: 0 !important;
     padding: 0 !important;
     background: #fff !important;
-    color: #1f2d25 !important;
+    color: #18231d !important;
     font-family: Arial, Helvetica, sans-serif !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -1842,10 +1834,7 @@ IMPRESSÃO DOS TIPOS
     overflow: visible !important;
   }
 
-  /* ---------------------------------------------------------
-     ESCONDE ELEMENTOS DA INTERFACE
-     --------------------------------------------------------- */
-
+  /* ===== NÃO IMPRIMIR A INTERFACE ===== */
   header,
   nav,
   aside,
@@ -1854,394 +1843,627 @@ IMPRESSÃO DOS TIPOS
   .header,
   .app-header,
   .mobile-header,
-  .reports-header-actions,
-  .report-actions,
-  .filter-section,
-  .filters,
+  .report-header,
   .report-filters,
-  .no-print,
-  .screen-only,
   .report-tabs,
   .tabs,
+  .no-print,
+  .screen-only,
   .toast,
   .modal,
-  .modal-overlay {
+  .modal-overlay,
+  .report-footer {
     display: none !important;
     visibility: hidden !important;
   }
 
-  /* ---------------------------------------------------------
-     CONTAINER PRINCIPAL
-     --------------------------------------------------------- */
+  /* ÍCONES DA INTERFACE NÃO FAZEM PARTE DO DOCUMENTO */
+  .report-document svg,
+  .report-document .stat-icon,
+  .report-document .analytics-icon,
+  .report-document .filter-icon,
+  .report-document .product-report-icon,
+  .report-document .occurrence-header > span {
+    display: none !important;
+    visibility: hidden !important;
+  }
 
-  .reports-page {
+  /* ===== ÁREA DO DOCUMENTO ===== */
+  .reports-page,
+  .reports-container {
     width: 100% !important;
     max-width: none !important;
+    min-width: 0 !important;
     min-height: 0 !important;
     height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  .report-document {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+
+  .report-document::before,
+  .report-title::after {
+    display: none !important;
+  }
+
+  /* ===== CABEÇALHO DO PDF ===== */
+  .report-title {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 12mm !important;
+    margin: 0 0 7mm 0 !important;
+    padding: 0 0 5mm 0 !important;
+    border-bottom: 1.2px solid #b9c7bd !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+  }
+
+  .report-title > div:first-child {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .report-label {
+    display: inline-block !important;
+    margin: 0 0 2mm 0 !important;
+    padding: 1.2mm 2mm !important;
+    border-radius: 1mm !important;
+    background: #edf4ef !important;
+    color: #356947 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    letter-spacing: .06em !important;
+  }
+
+  .report-title h2 {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #18251e !important;
+    font-size: 23pt !important;
+    line-height: 1.12 !important;
+    font-weight: 700 !important;
+    letter-spacing: -.02em !important;
+  }
+
+  .report-title p {
+    max-width: 150mm !important;
+    margin: 2mm 0 0 !important;
+    color: #4f5d54 !important;
+    font-size: 10.5pt !important;
+    line-height: 1.45 !important;
+  }
+
+  .report-period {
+    flex: 0 0 48mm !important;
+    min-width: 48mm !important;
+    box-sizing: border-box !important;
+    align-self: flex-start !important;
+    margin-top: 1mm !important;
+    padding: 2mm 0 2mm 5mm !important;
+    border-left: 1.2px solid #c7d3cb !important;
+  }
+
+  .report-period span {
+    display: block !important;
+    margin: 0 0 1mm !important;
+    color: #69766e !important;
+    font-size: 8pt !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    letter-spacing: .05em !important;
+  }
+
+  .report-period strong {
+    display: block !important;
+    color: #26362d !important;
+    font-size: 10.5pt !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+  }
+
+  /* ===== SEÇÕES ===== */
+  .report-section {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin: 0 0 7mm 0 !important;
+    padding: 0 0 6mm 0 !important;
+    border-bottom: 1px solid #d7dfda !important;
     background: #fff !important;
     overflow: visible !important;
   }
 
-  .reports-page > * {
-    max-width: none !important;
+  .report-section:last-of-type {
+    border-bottom: 0 !important;
   }
 
-  /* ---------------------------------------------------------
-     DIÁRIO DE CAMPO
-     
-     Quando for Diário, imprime somente a versão própria
-     para impressão.
-     --------------------------------------------------------- */
+  .section-heading {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    gap: 8mm !important;
+    margin: 0 0 4mm 0 !important;
+  }
 
-  .reports-page.is-print-diary > *:not(.print-diary-report) {
+  .section-heading > div:first-child {
+    padding-left: 0 !important;
+  }
+
+  .section-heading > div:first-child::before {
+    display: none !important;
+  }
+
+  .section-heading span {
+    display: block !important;
+    margin: 0 0 1mm 0 !important;
+    color: #647269 !important;
+    font-size: 8pt !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    letter-spacing: .06em !important;
+  }
+
+  .section-heading h3 {
+    margin: 0 !important;
+    color: #1f2e25 !important;
+    font-size: 15pt !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    letter-spacing: -.01em !important;
+  }
+
+  /* ===== TEXTO ===== */
+  .report-document p,
+  .report-document span,
+  .report-document strong,
+  .report-document small,
+  .report-document td,
+  .report-document th {
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .report-document p {
+    color: #29372f !important;
+    font-size: 10.5pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* ===== ESTATÍSTICAS ===== */
+  .report-stat-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .report-stat-card {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    box-sizing: border-box !important;
+    padding: 4mm !important;
+    border: 1px solid #d3ddd6 !important;
+    border-radius: 2mm !important;
+    background: #fafcfb !important;
+    box-shadow: none !important;
+  }
+
+  .report-stat-card span {
+    color: #5f6d65 !important;
+    font-size: 9pt !important;
+    line-height: 1.25 !important;
+    font-weight: 600 !important;
+  }
+
+  .report-stat-card strong {
+    margin-top: 1mm !important;
+    color: #1d3025 !important;
+    font-size: 18pt !important;
+    line-height: 1 !important;
+  }
+
+  .report-stat-card::after {
+    display: none !important;
+  }
+
+  /* ===== GRÁFICOS / RESUMOS ===== */
+  .analytics-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 5mm !important;
+  }
+
+  .analytics-card,
+  .occurrence-card,
+  .product-report-card {
+    box-sizing: border-box !important;
+    padding: 4mm !important;
+    border: 1px solid #d3ddd6 !important;
+    border-radius: 2mm !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .analytics-card::before,
+  .occurrence-card::before,
+  .product-report-card::after {
+    display: none !important;
+  }
+
+  .analytics-card-header {
+    margin-bottom: 3mm !important;
+  }
+
+  .analytics-card-header span {
+    font-size: 8pt !important;
+  }
+
+  .analytics-card-header h4 {
+    font-size: 11.5pt !important;
+  }
+
+  .monthly-chart {
+    gap: 3mm !important;
+  }
+
+  .monthly-row {
+    grid-template-columns: 28mm 1fr 9mm !important;
+    gap: 3mm !important;
+  }
+
+  .monthly-label,
+  .monthly-row > strong {
+    font-size: 9pt !important;
+  }
+
+  .monthly-bar-area {
+    height: 4mm !important;
+  }
+
+  .completion-content {
+    min-height: 0 !important;
+    gap: 8mm !important;
+    padding: 2mm 0 !important;
+  }
+
+  .completion-circle {
+    width: 34mm !important;
+    height: 34mm !important;
+    flex: 0 0 34mm !important;
+    box-shadow: none !important;
+  }
+
+  .completion-circle::before {
+    inset: 3mm !important;
+  }
+
+  .completion-circle strong {
+    font-size: 17pt !important;
+  }
+
+  .completion-circle span {
+    font-size: 8pt !important;
+  }
+
+  .completion-details {
+    min-width: 50mm !important;
+    gap: 3mm !important;
+  }
+
+  .completion-details span {
+    font-size: 9pt !important;
+  }
+
+  .completion-details strong {
+    font-size: 10pt !important;
+  }
+
+  .plot-report-list,
+  .summary-list {
+    gap: 3.5mm !important;
+  }
+
+  .plot-report-row,
+  .summary-row {
+    grid-template-columns: 43mm 1fr 12mm !important;
+    gap: 3mm !important;
+  }
+
+  .plot-report-info strong,
+  .summary-row-info strong {
+    font-size: 9.5pt !important;
+  }
+
+  .plot-report-info span,
+  .summary-row-info span {
+    font-size: 8.5pt !important;
+  }
+
+  .plot-report-bar,
+  .summary-bar {
+    height: 3.5mm !important;
+  }
+
+  .plot-report-row > strong,
+  .summary-row > strong {
+    font-size: 9pt !important;
+  }
+
+  .occurrence-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+  }
+
+  .occurrence-header strong {
+    font-size: 10pt !important;
+  }
+
+  .occurrence-header small,
+  .occurrence-item span,
+  .occurrence-item strong,
+  .occurrence-empty {
+    font-size: 9pt !important;
+  }
+
+  .product-report-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+  }
+
+  .product-report-card strong {
+    font-size: 9.5pt !important;
+  }
+
+  .product-report-card span,
+  .product-report-card small {
+    font-size: 8.5pt !important;
+  }
+
+  /* ===== TABELAS — SEM CORTE HORIZONTAL ===== */
+  .activities-table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+    border: 1px solid #cbd6cf !important;
+    border-radius: 1.5mm !important;
+    box-shadow: none !important;
+  }
+
+  .activities-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    background: #fff !important;
+  }
+
+  .activities-table th {
+    padding: 2.5mm 2mm !important;
+    color: #26352d !important;
+    background: #edf3ef !important;
+    border: 1px solid #cbd6cf !important;
+    font-size: 8.5pt !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    vertical-align: middle !important;
+  }
+
+  .activities-table td {
+    padding: 2.5mm 2mm !important;
+    color: #29372f !important;
+    background: #fff !important;
+    border: 1px solid #d7dfda !important;
+    font-size: 9.5pt !important;
+    line-height: 1.35 !important;
+    vertical-align: top !important;
+  }
+
+  .activities-table td strong {
+    display: block !important;
+    color: #17271e !important;
+    font-size: 10pt !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+  }
+
+  .activities-table td small {
+    display: block !important;
+    margin-top: 1mm !important;
+    color: #4f5e55 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.35 !important;
+  }
+
+  .activities-table tbody tr:nth-child(even),
+  .activities-table tbody tr:hover {
+    background: #fff !important;
+  }
+
+  .status-badge {
+    display: inline-block !important;
+    padding: 1mm 1.5mm !important;
+    border: 1px solid #c8d5cc !important;
+    border-radius: 1mm !important;
+    background: #f3f7f4 !important;
+    color: #26372d !important;
+    font-size: 8.5pt !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    white-space: normal !important;
+  }
+
+  /* ===== FOTOS: SOMENTE GERAL E DIÁRIO ===== */
+  .report-photo-section {
     display: none !important;
     visibility: hidden !important;
   }
 
-  .reports-page.is-print-diary {
-    display: block !important;
-    width: 100% !important;
-    min-height: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-
-  .reports-page.is-print-diary .print-diary-report {
+  .report-photo-appendix {
     display: block !important;
     visibility: visible !important;
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-
-  .print-diary-report {
     width: 100% !important;
     max-width: none !important;
-  }
-
-  /* ---------------------------------------------------------
-     PÁGINAS DO DIÁRIO
-     --------------------------------------------------------- */
-
-  .print-diary-page {
-    display: block !important;
-    position: relative !important;
-    width: 100% !important;
-    min-height: 0 !important;
-    height: auto !important;
     margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .print-diary-cover {
-    min-height: 0 !important;
-    page-break-after: always !important;
-    break-after: page !important;
-  }
-
-  .print-diary-photos-page {
-    display: block !important;
-    visibility: visible !important;
-
-    page-break-before: always !important;
+    padding: 7mm 0 0 !important;
+    border-top: 2px solid #aebeb4 !important;
+    border-bottom: 0 !important;
     break-before: page !important;
-
-    page-break-after: always !important;
-    break-after: page !important;
-
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-
-    overflow: visible !important;
+    page-break-before: always !important;
   }
 
-  .print-diary-details-page {
+  .report-photo-appendix .section-heading {
+    margin-bottom: 5mm !important;
+  }
+
+  .report-photo-list {
+    width: 100% !important;
     display: block !important;
-    visibility: visible !important;
-
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-
-    overflow: visible !important;
   }
 
-  /* ---------------------------------------------------------
-     CABEÇALHOS
-     --------------------------------------------------------- */
-
-  .print-header,
-  .report-print-header {
+  .report-photo-group {
     width: 100% !important;
-    margin: 0 0 7mm 0 !important;
-    padding: 0 0 4mm 0 !important;
-
-    border-bottom: 1px solid #cbd5cf !important;
-
+    margin: 0 0 7mm !important;
+    padding: 0 0 5mm !important;
+    border-bottom: 1px solid #d5ddd8 !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
-  .print-header h1,
-  .report-print-header h1 {
-    margin: 0 !important;
-    padding: 0 !important;
-
-    font-size: 20pt !important;
-    line-height: 1.15 !important;
-    font-weight: 700 !important;
+  .report-photo-caption {
+    margin: 0 0 3mm !important;
   }
 
-  .print-header h2,
-  .report-print-header h2 {
-    margin: 2mm 0 0 0 !important;
-    padding: 0 !important;
-
+  .report-photo-caption strong {
+    display: block !important;
+    color: #17271e !important;
     font-size: 12pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .report-photo-caption span {
+    display: block !important;
+    margin-top: 1mm !important;
+    color: #5c6961 !important;
+    font-size: 9pt !important;
     line-height: 1.3 !important;
+  }
+
+  .report-photo-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+    width: 100% !important;
+  }
+
+  .report-photo-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    overflow: visible !important;
+  }
+
+  .report-photo-card img {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 78mm !important;
+    object-fit: contain !important;
+    border: 1px solid #ccd7d0 !important;
+    border-radius: 1.5mm !important;
+    background: #f6f8f7 !important;
+  }
+
+  .report-photo-card figcaption {
+    margin-top: 1.5mm !important;
+    color: #435149 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.3 !important;
+  }
+
+  .report-photo-details {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2mm 5mm !important;
+    margin-top: 4mm !important;
+    width: 100% !important;
+  }
+
+  .report-photo-details > div {
+    min-width: 0 !important;
+    padding: 1.5mm 0 !important;
+    border-bottom: 1px solid #e0e6e2 !important;
+  }
+
+  .report-photo-details span {
+    display: block !important;
+    margin-bottom: .7mm !important;
+    color: #68756d !important;
+    font-size: 8pt !important;
+    line-height: 1.2 !important;
     font-weight: 600 !important;
   }
 
-  .print-header p,
-  .report-print-header p {
-    margin: 2mm 0 0 0 !important;
-
-    font-size: 9.5pt !important;
-    line-height: 1.4 !important;
-  }
-
-  /* ---------------------------------------------------------
-     SEÇÕES DO PDF
-     --------------------------------------------------------- */
-
-  .report-section,
-  .print-section,
-  .report-block {
-    width: 100% !important;
-    max-width: none !important;
-
-    margin: 0 0 6mm 0 !important;
-    padding: 0 !important;
-
-    overflow: visible !important;
-  }
-
-  .report-section h2,
-  .report-section h3,
-  .print-section h2,
-  .print-section h3,
-  .report-block h2,
-  .report-block h3 {
-    break-after: avoid !important;
-    page-break-after: avoid !important;
-  }
-
-  /* ---------------------------------------------------------
-     TÍTULOS
-     --------------------------------------------------------- */
-
-  .report-section-title,
-  .print-section-title {
-    margin: 0 0 3mm 0 !important;
-    padding: 0 0 2mm 0 !important;
-
-    font-size: 13pt !important;
-    line-height: 1.25 !important;
-    font-weight: 700 !important;
-
-    border-bottom: 1px solid #d5ddd8 !important;
-
-    break-after: avoid !important;
-    page-break-after: avoid !important;
-  }
-
-  /* ---------------------------------------------------------
-     CARDS
-     --------------------------------------------------------- */
-
-  .report-card,
-  .print-card,
-  .activity-card,
-  .print-activity-card,
-  .report-summary-card {
-    width: 100% !important;
-    max-width: none !important;
-
-    box-sizing: border-box !important;
-
-    margin: 0 0 4mm 0 !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-
-    overflow: visible !important;
-  }
-
-  /* ---------------------------------------------------------
-     ATIVIDADE
-     --------------------------------------------------------- */
-
-  .print-activity-card {
-    margin-bottom: 6mm !important;
-    padding-bottom: 4mm !important;
-
-    border-bottom: 1px solid #d7ded9 !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .print-activity-card:last-child {
-    border-bottom: none !important;
-  }
-
-  /* ---------------------------------------------------------
-     TÍTULO DA ATIVIDADE
-     --------------------------------------------------------- */
-
-  .print-activity-title {
-    margin: 0 0 3mm 0 !important;
-    padding: 0 !important;
-
-    font-size: 14pt !important;
-    line-height: 1.3 !important;
-    font-weight: 700 !important;
-
-    break-after: avoid !important;
-    page-break-after: avoid !important;
-  }
-
-  /* ---------------------------------------------------------
-     INFORMAÇÕES DA ATIVIDADE
-     --------------------------------------------------------- */
-
-  .print-activity-info,
-  .print-activity-meta,
-  .activity-meta,
-  .print-meta-grid {
-    width: 100% !important;
-
-    margin: 0 0 3mm 0 !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .print-activity-info *,
-  .print-activity-meta *,
-  .activity-meta *,
-  .print-meta-grid * {
-    box-sizing: border-box !important;
-  }
-
-  /* ---------------------------------------------------------
-     OBSERVAÇÕES — PRINCIPAL ALTERAÇÃO
-     --------------------------------------------------------- */
-
-  .print-description-box {
-    width: 100% !important;
-    max-width: none !important;
-
-    margin: 4mm 0 5mm 0 !important;
-    padding: 4mm !important;
-
-    box-sizing: border-box !important;
-
-    border: 1px solid #cbd5cf !important;
-    border-radius: 2mm !important;
-
-    background: #f8faf9 !important;
-
-    break-inside: auto !important;
-    page-break-inside: auto !important;
-
-    overflow: visible !important;
-  }
-
-  .print-description-box h4,
-  .print-description-box .description-title,
-  .print-description-box strong {
+  .report-photo-details strong {
     display: block !important;
-
-    margin: 0 0 2mm 0 !important;
-
-    font-size: 11.5pt !important;
-    line-height: 1.3 !important;
-    font-weight: 700 !important;
-  }
-
-  /*
-   * OBSERVAÇÕES EM FONTE GRANDE
-   * Antes: 11pt
-   * Agora: 13pt
-   */
-
-  .print-description-box p {
-    margin: 2mm 0 0 0 !important;
-    padding: 0 !important;
-
-    color: #1f2d25 !important;
-
-    font-size: 13pt !important;
-    line-height: 1.7 !important;
-
-    font-weight: 500 !important;
-
-    white-space: pre-wrap !important;
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-
-    max-width: none !important;
-
-    break-inside: auto !important;
-    page-break-inside: auto !important;
-  }
-
-  .print-description-box p:last-child {
-    margin-bottom: 0 !important;
-  }
-
-  /* ---------------------------------------------------------
-     TEXTOS GERAIS
-     --------------------------------------------------------- */
-
-  .print-diary-report p,
-  .print-diary-report span,
-  .print-diary-report div {
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-
-  .print-diary-report p {
-    max-width: 100% !important;
-  }
-
-  /* ---------------------------------------------------------
-     TABELAS
-     --------------------------------------------------------- */
-
-  table {
-    width: 100% !important;
-    max-width: 100% !important;
-
-    border-collapse: collapse !important;
-
+    color: #25342b !important;
     font-size: 9pt !important;
+    line-height: 1.35 !important;
+    font-weight: 600 !important;
+  }
 
-    break-inside: auto !important;
-    page-break-inside: auto !important;
+  .report-photo-description {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* ===== PAGINAÇÃO ===== */
+  .report-title,
+  .section-heading,
+  .report-stat-card,
+  .analytics-card,
+  .occurrence-card,
+  .product-report-card,
+  .activities-table-wrapper {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .report-section h3,
+  .section-heading {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   thead {
@@ -2252,325 +2474,14 @@ IMPRESSÃO DOS TIPOS
     display: table-footer-group !important;
   }
 
-  tr {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
   }
-
-  th,
-  td {
-    padding: 2mm !important;
-
-    vertical-align: top !important;
-
-    border: 1px solid #d5ddd8 !important;
-
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-
-  th {
-    font-weight: 700 !important;
-  }
-
-  /* ---------------------------------------------------------
-     RESUMOS / ESTATÍSTICAS
-     --------------------------------------------------------- */
-
-  .report-summary,
-  .statistics-grid,
-  .stats-grid,
-  .summary-grid,
-  .report-statistics {
-    width: 100% !important;
-    max-width: none !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .report-summary-card,
-  .stat-card,
-  .summary-card {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  /* ---------------------------------------------------------
-     FOTOS
-     
-     REGRA PRINCIPAL:
-     A seção de fotos normal da tela NÃO será impressa.
-     --------------------------------------------------------- */
-
-  .report-photo-section {
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  /*
-   * O anexo fotográfico usado pelo PDF GERAL permanece
-   * visível na impressão.
-   */
-
-  .report-photo-appendix {
-    display: block !important;
-    visibility: visible !important;
-
-    width: 100% !important;
-    max-width: none !important;
-
-    height: auto !important;
-    min-height: 0 !important;
-
-    overflow: visible !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  /* ---------------------------------------------------------
-     FOTOS DO GERAL
-     --------------------------------------------------------- */
-
-  .report-photo-appendix .report-photo-list {
-    width: 100% !important;
-    max-width: none !important;
-
-    display: block !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  .report-photo-appendix .report-photo-group {
-    width: 100% !important;
-
-    margin: 0 0 6mm 0 !important;
-    padding: 0 !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .report-photo-appendix .report-photo-card {
-    width: 100% !important;
-
-    margin: 0 0 5mm 0 !important;
-    padding: 0 !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-
-    overflow: visible !important;
-  }
-
-  .report-photo-appendix .report-photo-card img {
-    display: block !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-
-    max-height: 90mm !important;
-
-    object-fit: contain !important;
-
-    margin: 0 auto !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .report-photo-appendix .report-photo-details,
-  .report-photo-appendix .report-photo-caption,
-  .report-photo-appendix .report-photo-description {
-    width: 100% !important;
-
-    box-sizing: border-box !important;
-
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-
-  .report-photo-appendix .report-photo-caption {
-    margin-top: 2mm !important;
-
-    font-size: 10pt !important;
-    line-height: 1.35 !important;
-
-    font-weight: 700 !important;
-  }
-
-  .report-photo-appendix .report-photo-description {
-    margin-top: 1.5mm !important;
-
-    font-size: 9.5pt !important;
-    line-height: 1.45 !important;
-  }
-
-  /* ---------------------------------------------------------
-     FOTOS DO DIÁRIO
-     --------------------------------------------------------- */
-
-  .print-diary-photos-page {
-    display: block !important;
-    visibility: visible !important;
-
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-
-    overflow: visible !important;
-  }
-
-  .print-diary-photos-page .print-photo-group,
-  .print-diary-photos-page .print-photo-card {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .print-diary-photos-page .print-photo-group {
-    width: 100% !important;
-
-    margin: 0 0 7mm 0 !important;
-    padding: 0 !important;
-  }
-
-  .print-diary-photos-page .print-photo-card {
-    width: 100% !important;
-
-    margin: 0 0 6mm 0 !important;
-    padding: 0 !important;
-
-    overflow: visible !important;
-  }
-
-  .print-diary-photos-page .print-photo-card img {
-    display: block !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    height: auto !important;
-    max-height: 100mm !important;
-
-    object-fit: contain !important;
-
-    margin: 0 auto !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .print-diary-photos-page .print-photo-caption {
-    margin-top: 2mm !important;
-
-    font-size: 10pt !important;
-    line-height: 1.4 !important;
-
-    font-weight: 700 !important;
-
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-
-  /* ---------------------------------------------------------
-     IMAGENS EM GERAL
-     --------------------------------------------------------- */
-
-  img {
-    max-width: 100% !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  /* ---------------------------------------------------------
-     EVITA CORTES
-     --------------------------------------------------------- */
-
-  .print-description-box,
-  .print-photo-card,
-  .print-photo-group,
-  .report-photo-card,
-  .report-photo-group,
-  .report-card,
-  .activity-card {
-    overflow: visible !important;
-  }
-
-  /* ---------------------------------------------------------
-     ELEMENTOS QUE NÃO DEVEM CRIAR PÁGINAS EXTRAS
-     --------------------------------------------------------- */
 
   .hidden,
   .d-none,
   [hidden] {
     display: none !important;
   }
-
-  /* ---------------------------------------------------------
-     LINKS
-     --------------------------------------------------------- */
-
-  a {
-    color: inherit !important;
-    text-decoration: none !important;
-  }
-
-  /* ---------------------------------------------------------
-     QUEBRAS DE PÁGINA
-     --------------------------------------------------------- */
-
-  .page-break {
-    page-break-before: always !important;
-    break-before: page !important;
-  }
-
-  .page-break-after {
-    page-break-after: always !important;
-    break-after: page !important;
-  }
-
-  .avoid-break {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* ---------------------------------------------------------
-     RODAPÉ
-     --------------------------------------------------------- */
-
-  .print-footer {
-    width: 100% !important;
-
-    margin-top: 6mm !important;
-    padding-top: 2mm !important;
-
-    border-top: 1px solid #d5ddd8 !important;
-
-    font-size: 8pt !important;
-    line-height: 1.3 !important;
-
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  /* ---------------------------------------------------------
-     GARANTE QUE A VERSÃO DE TELA NÃO APAREÇA NO DIÁRIO
-     --------------------------------------------------------- */
-
-  .reports-page.is-print-diary .report-section,
-  .reports-page.is-print-diary .report-card,
-  .reports-page.is-print-diary .report-photo-section {
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  .reports-page.is-print-diary .print-diary-report,
-  .reports-page.is-print-diary .print-diary-report * {
-    visibility: visible !important;
-  }
-
 }

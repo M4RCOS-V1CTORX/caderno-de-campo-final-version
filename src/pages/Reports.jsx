@@ -3896,10 +3896,11 @@ function Reports({ onBack }) {
               REGISTRO VISUAL
           =================================================== */}
 
-          {filteredActivities.some((activity) => {
-            const key = activity.uuid || String(activity.id);
-            return (reportPhotoUrls[key] || []).length > 0;
-          }) && (
+          {(selectedReport === "geral" || selectedReport === "diario") &&
+            filteredActivities.some((activity) => {
+              const key = activity.uuid || String(activity.id);
+              return (reportPhotoUrls[key] || []).length > 0;
+            }) && (
             <section className="report-section report-photo-appendix">
               <div className="section-heading">
                 <div>
