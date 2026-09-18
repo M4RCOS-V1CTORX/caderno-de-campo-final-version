@@ -1183,7 +1183,6 @@ border-top: 1px solid #dce6df;
 }
 
 .report-footer::before {
-content: "🌿";
 position: absolute;
 right: 25%;
 top: 50%;
@@ -1258,504 +1257,7 @@ PRINT / PDF
 display: none;
 }
 
-@media print {
 
-  @page {
-    size: A4;
-    margin: 10mm 10mm 12mm;
-  }
-
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    background: #ffffff !important;
-    color: #202a24;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  * {
-    box-shadow: none !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  .reports-page {
-    width: 100%;
-    max-width: none;
-    padding: 0;
-    margin: 0;
-    background: #ffffff;
-  }
-
-  .report-document {
-    width: 100%;
-    overflow: visible;
-    border: 0;
-    border-radius: 0;
-    background: #ffffff;
-  }
-
-  .report-document::before {
-    height: 5px;
-  }
-
-  /* =========================
-     CABEÇALHO
-  ========================= */
-
-  .print-report-header {
-    display: flex !important;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 30px;
-    padding: 0 0 15px;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #315f45;
-  }
-
-  .print-report-header strong {
-    display: block;
-    margin-bottom: 5px;
-    color: #315f45;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    font-weight: 900;
-  }
-
-  .print-report-header h1 {
-    margin: 0;
-    color: #202b24;
-    font-size: 25px;
-    letter-spacing: -0.03em;
-  }
-  .print-contact {
-  margin-top: 7px;
-  color: #526158;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-  .print-report-date {
-    padding-top: 5px;
-    color: #68746d;
-    font-size: 10px;
-  }
-
-  /* =========================
-     TÍTULO
-  ========================= */
-
-  .report-title {
-    padding: 22px 0;
-    border-bottom: 1px solid #dfe6e1;
-    background:
-      linear-gradient(
-        135deg,
-        #f0f6f2,
-        #ffffff
-      ) !important;
-  }
-
-  .report-label {
-    margin-bottom: 7px;
-    padding: 5px 8px;
-    font-size: 8px;
-  }
-
-  .report-title h2 {
-    font-size: 23px;
-    line-height: 1.15;
-  }
-
-  .report-title p {
-    max-width: 620px;
-    margin-top: 7px;
-    font-size: 10px;
-    line-height: 1.5;
-  }
-
-  .report-period {
-    min-width: 170px;
-    padding: 9px 0 9px 17px;
-  }
-
-  .report-period span {
-    margin-bottom: 5px;
-    font-size: 8px;
-  }
-
-  .report-period strong {
-    font-size: 10px;
-  }
-
-  /* =========================
-     SEÇÕES
-  ========================= */
-
-  .report-section {
-    padding: 20px 0;
-    border-bottom: 1px solid #dfe7e2;
-    background: #ffffff !important;
-    break-inside: avoid;
-  }
-
-  .section-heading {
-    margin-bottom: 14px;
-  }
-
-  .section-heading > div:first-child {
-    padding-left: 11px;
-  }
-
-  .section-heading > div:first-child::before {
-    width: 3px;
-    height: 31px;
-  }
-
-  .section-heading span {
-    margin-bottom: 4px;
-    font-size: 8px;
-  }
-
-  .section-heading h3 {
-    font-size: 15px;
-  }
-
-  /* =========================
-     INDICADORES
-  ========================= */
-
-  .report-stat-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
-  }
-
-  .report-stat-card {
-    min-height: 78px;
-    padding: 11px;
-    border: 1px solid #d9e4dc;
-    background: #f8fbf9 !important;
-    break-inside: avoid;
-  }
-
-  .stat-icon {
-    width: 31px;
-    height: 31px;
-    flex-basis: 31px;
-    border-radius: 8px;
-    font-size: 13px;
-  }
-
-  .report-stat-card span {
-    font-size: 8px;
-  }
-
-  .report-stat-card strong {
-    margin-top: 4px;
-    font-size: 19px;
-  }
-
-  /* =========================
-     ANALYTICS
-  ========================= */
-
-  .analytics-grid {
-    grid-template-columns: 1.45fr 1fr;
-    gap: 12px;
-  }
-
-  .analytics-card {
-    padding: 14px;
-    border: 1px solid #d9e4dc;
-    background: #f9fbfa !important;
-    break-inside: avoid;
-  }
-
-  .analytics-card-header {
-    margin-bottom: 14px;
-  }
-
-  .analytics-card-header h4 {
-    font-size: 12px;
-  }
-
-  .analytics-card-header span {
-    margin-bottom: 4px;
-    font-size: 7px;
-  }
-
-  .analytics-icon {
-    width: 29px;
-    height: 29px;
-    font-size: 11px;
-  }
-
-  .monthly-chart {
-    gap: 9px;
-  }
-
-  .monthly-row {
-    grid-template-columns: 58px 1fr 22px;
-    gap: 7px;
-  }
-
-  .monthly-label {
-    font-size: 8px;
-  }
-
-  .monthly-bar-area {
-    height: 8px;
-  }
-
-  .monthly-row > strong {
-    font-size: 8px;
-  }
-
-  /* =========================
-     CONCLUSÃO
-  ========================= */
-
-  .completion-content {
-    min-height: 125px;
-    gap: 20px;
-  }
-
-  .completion-circle {
-    width: 105px;
-    height: 105px;
-    flex-basis: 105px;
-  }
-
-  .completion-circle::before {
-    inset: 8px;
-  }
-
-  .completion-circle strong {
-    font-size: 22px;
-  }
-
-  .completion-circle span {
-    margin-top: 4px;
-    font-size: 7px;
-  }
-
-  .completion-details {
-    min-width: 125px;
-    gap: 8px;
-  }
-
-  .completion-details div {
-    gap: 12px;
-    padding-bottom: 6px;
-  }
-
-  .completion-details span,
-  .completion-details strong {
-    font-size: 8px;
-  }
-
-  /* =========================
-     TALHÕES
-  ========================= */
-
-  .plot-report-row,
-  .summary-row {
-    grid-template-columns: 135px 1fr 28px;
-    gap: 9px;
-  }
-
-  .plot-report-list,
-  .summary-list {
-    gap: 9px;
-  }
-
-  .plot-report-info strong,
-  .summary-row-info strong {
-    font-size: 9px;
-  }
-
-  .plot-report-info span,
-  .summary-row-info span {
-    margin-top: 3px;
-    font-size: 7px;
-  }
-
-  .plot-report-bar,
-  .summary-bar {
-    height: 8px;
-  }
-
-  .plot-report-row > strong,
-  .summary-row > strong {
-    font-size: 8px;
-  }
-
-  /* =========================
-     OCORRÊNCIAS
-  ========================= */
-
-  .occurrence-grid {
-    gap: 12px;
-  }
-
-  .occurrence-card {
-    padding: 13px;
-    border: 1px solid #d9e4dc;
-    background: #f9fbfa !important;
-    break-inside: avoid;
-  }
-
-  .occurrence-header {
-    padding-bottom: 9px;
-    margin-bottom: 4px;
-  }
-
-  .occurrence-header > span {
-    width: 29px;
-    height: 29px;
-    font-size: 11px;
-  }
-
-  .occurrence-header strong {
-    font-size: 10px;
-  }
-
-  .occurrence-header small {
-    font-size: 7px;
-  }
-
-  .occurrence-item {
-    padding: 6px 0;
-  }
-
-  .occurrence-item span,
-  .occurrence-item strong {
-    font-size: 8px;
-  }
-
-  /* =========================
-     PRODUTOS
-  ========================= */
-
-  .product-report-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .product-report-card {
-    padding: 10px;
-    border: 1px solid #d9e4dc;
-    background: #f9fbfa !important;
-    break-inside: avoid;
-  }
-
-  .product-report-icon {
-    width: 28px;
-    height: 28px;
-    flex-basis: 28px;
-    font-size: 10px;
-  }
-
-  .product-report-card strong {
-    font-size: 8px;
-  }
-
-  .product-report-card span,
-  .product-report-card small {
-    margin-top: 3px;
-    font-size: 7px;
-  }
-
-  /* =========================
-     TABELA
-  ========================= */
-
-  .activities-table-wrapper {
-    overflow: visible;
-    border: 1px solid #d7e2da;
-    border-radius: 6px;
-  }
-
-  .activities-table {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .activities-table th {
-    padding: 8px;
-    background: #edf4ef !important;
-    border-bottom: 1px solid #ccdacf;
-    font-size: 7.5px;
-  }
-
-  .activities-table td {
-    padding: 8px;
-    font-size: 8px;
-    line-height: 1.35;
-  }
-
-  .activities-table td strong {
-    font-size: 8px;
-  }
-
-  .activities-table td small {
-    margin-top: 2px;
-    font-size: 7px;
-  }
-
-  .status-badge {
-    padding: 4px 6px;
-    font-size: 7px;
-  }
-
-  /* =========================
-     RODAPÉ
-  ========================= */
-
-  .report-footer {
-    padding: 15px 0 0;
-    background: #ffffff !important;
-    border-top: 1px solid #d7e2da;
-  }
-
-  .report-footer strong {
-    font-size: 8px;
-  }
-
-  .report-footer span,
-  .report-footer > div:last-child {
-    font-size: 7px;
-  }
-
-  /* =========================
-     QUEBRAS
-  ========================= */
-
-  .report-history {
-    break-before: page;
-  }
-
-  .report-section,
-  .analytics-card,
-  .occurrence-card,
-  .product-report-card,
-  .report-stat-card {
-    break-inside: avoid;
-  }
-
-  .activities-table tr {
-    break-inside: avoid;
-  }
-}
 
 /* =========================================================
 RESPONSIVO
@@ -2142,11 +1644,7 @@ min-height: 120px;
 IMPRESSÃO DOS TIPOS
 ========================================================= */
 
-@media print {
-.report-types {
-display: none !important;
-}
-}
+
 .report-back-button {
   display: inline-flex;
   align-items: center;
@@ -2186,101 +1684,893 @@ display: none !important;
 /* =========================================================
    PDF PREMIUM — REFINAMENTO VISUAL
 ========================================================= */
+
+
+/* =========================================================
+   RELATÓRIO VISUAL — FOTOS E MOVIMENTAÇÕES
+========================================================= */
+.report-photo-appendix {
+  margin-top: 22px;
+}
+
+.report-photo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.report-photo-group {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.report-photo-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 3px solid #2f6b49;
+}
+
+.report-photo-caption strong {
+  font-size: 14px;
+  color: #1f2d25;
+}
+
+.report-photo-caption span {
+  color: #6b776f;
+  font-size: 11px;
+}
+
+.report-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.report-photo-card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #dfe6e1;
+  border-radius: 12px;
+  background: #f7faf8;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.report-photo-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #eaf0ec;
+}
+
+.report-photo-card figcaption {
+  padding: 8px 10px;
+  color: #66736b;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stock-movement-report-section .report-stat-grid {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 700px) {
+  .report-photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .report-photo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+.report-photo-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #e1e8e3;
+  border-radius: 10px;
+  background: #fbfcfb;
+}
+.report-photo-details > div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.report-photo-details span { font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: #7a857e; font-weight: 700; }
+.report-photo-details strong { font-size: 11px; line-height: 1.35; color: #334038; overflow-wrap: anywhere; }
+.report-photo-description { grid-column: 1 / -1; }
+
+@media (max-width: 650px) { .report-photo-details { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+/* =========================================================
+   PDF — DIÁRIO DE CAMPO
+   MODELO A4
+   SEM PÁGINAS VAZIAS
+========================================================= */
+
+.print-diary-report {
+  display: none;
+}
+
+
+/* =========================================================
+   CORREÇÃO FINAL DO PDF
+   Modelo baseado no PDF de referência da cliente
+   NÃO ALTERA O SISTEMA — SOMENTE A IMPRESSÃO
+========================================================= */
+
+/* =========================================================
+   IMPRESSÃO / PDF — CADERNO DE CAMPO
+   ========================================================= */
+
 @media print {
-  @page { size: A4; margin: 12mm 11mm 14mm; }
 
-  .report-back-button,
-  .report-header,
-  .report-types,
+  /* ---------------------------------------------------------
+     CONFIGURAÇÃO DA PÁGINA
+     --------------------------------------------------------- */
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 12mm 14mm 12mm;
+  }
+
+  html,
+  body {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    color: #1f2d25 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    overflow: visible !important;
+  }
+
+  /* ---------------------------------------------------------
+     ESCONDE ELEMENTOS DA INTERFACE
+     --------------------------------------------------------- */
+
+  header,
+  nav,
+  aside,
+  button,
+  .sidebar,
+  .header,
+  .app-header,
+  .mobile-header,
+  .reports-header-actions,
+  .report-actions,
+  .filter-section,
+  .filters,
   .report-filters,
-  .report-print-button,
-  button {
+  .no-print,
+  .screen-only,
+  .report-tabs,
+  .tabs,
+  .toast,
+  .modal,
+  .modal-overlay {
     display: none !important;
+    visibility: hidden !important;
   }
 
-  .print-report-header {
-    display: flex !important;
-    position: relative;
-    padding: 8mm 0 6mm !important;
-    margin: 0 0 7mm !important;
-    border-top: 5px solid #245e40;
-    border-bottom: 1px solid #d8e1db;
+  /* ---------------------------------------------------------
+     CONTAINER PRINCIPAL
+     --------------------------------------------------------- */
+
+  .reports-page {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    overflow: visible !important;
   }
 
-  .print-report-header strong {
-    display: block;
-    margin-bottom: 3mm;
-    color: #245e40;
-    font-size: 9pt;
-    letter-spacing: .16em;
+  .reports-page > * {
+    max-width: none !important;
   }
 
-  .print-report-header h1 {
-    margin: 0 0 3mm !important;
-    color: #18241d;
-    font-size: 24pt !important;
-    line-height: 1.08;
+  /* ---------------------------------------------------------
+     DIÁRIO DE CAMPO
+     
+     Quando for Diário, imprime somente a versão própria
+     para impressão.
+     --------------------------------------------------------- */
+
+  .reports-page.is-print-diary > *:not(.print-diary-report) {
+    display: none !important;
+    visibility: hidden !important;
   }
 
-  .print-contact {
-    margin-top: 1.5mm;
-    color: #536158;
-    font-size: 9.5pt;
+  .reports-page.is-print-diary {
+    display: block !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
   }
 
-  .print-report-date {
-    padding: 3mm 0;
-    color: #6a766e;
-    font-size: 9pt;
-    text-align: right;
+  .reports-page.is-print-diary .print-diary-report {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
   }
 
-  .report-summary, .summary-grid, .report-stats {
-    break-inside: avoid;
-    page-break-inside: avoid;
+  .print-diary-report {
+    width: 100% !important;
+    max-width: none !important;
   }
 
-  .report-card, .report-table-wrapper, .report-section {
-    border: 1px solid #dbe3dd !important;
-    border-radius: 4mm !important;
-    overflow: hidden;
-    break-inside: avoid;
-    page-break-inside: avoid;
+  /* ---------------------------------------------------------
+     PÁGINAS DO DIÁRIO
+     --------------------------------------------------------- */
+
+  .print-diary-page {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
+
+  .print-diary-cover {
+    min-height: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .print-diary-photos-page {
+    display: block !important;
+    visibility: visible !important;
+
+    page-break-before: always !important;
+    break-before: page !important;
+
+    page-break-after: always !important;
+    break-after: page !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  .print-diary-details-page {
+    display: block !important;
+    visibility: visible !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  /* ---------------------------------------------------------
+     CABEÇALHOS
+     --------------------------------------------------------- */
+
+  .print-header,
+  .report-print-header {
+    width: 100% !important;
+    margin: 0 0 7mm 0 !important;
+    padding: 0 0 4mm 0 !important;
+
+    border-bottom: 1px solid #cbd5cf !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-header h1,
+  .report-print-header h1 {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 20pt !important;
+    line-height: 1.15 !important;
+    font-weight: 700 !important;
+  }
+
+  .print-header h2,
+  .report-print-header h2 {
+    margin: 2mm 0 0 0 !important;
+    padding: 0 !important;
+
+    font-size: 12pt !important;
+    line-height: 1.3 !important;
+    font-weight: 600 !important;
+  }
+
+  .print-header p,
+  .report-print-header p {
+    margin: 2mm 0 0 0 !important;
+
+    font-size: 9.5pt !important;
+    line-height: 1.4 !important;
+  }
+
+  /* ---------------------------------------------------------
+     SEÇÕES DO PDF
+     --------------------------------------------------------- */
+
+  .report-section,
+  .print-section,
+  .report-block {
+    width: 100% !important;
+    max-width: none !important;
+
+    margin: 0 0 6mm 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  .report-section h2,
+  .report-section h3,
+  .print-section h2,
+  .print-section h3,
+  .report-block h2,
+  .report-block h3 {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* ---------------------------------------------------------
+     TÍTULOS
+     --------------------------------------------------------- */
+
+  .report-section-title,
+  .print-section-title {
+    margin: 0 0 3mm 0 !important;
+    padding: 0 0 2mm 0 !important;
+
+    font-size: 13pt !important;
+    line-height: 1.25 !important;
+    font-weight: 700 !important;
+
+    border-bottom: 1px solid #d5ddd8 !important;
+
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* ---------------------------------------------------------
+     CARDS
+     --------------------------------------------------------- */
+
+  .report-card,
+  .print-card,
+  .activity-card,
+  .print-activity-card,
+  .report-summary-card {
+    width: 100% !important;
+    max-width: none !important;
+
+    box-sizing: border-box !important;
+
+    margin: 0 0 4mm 0 !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+
+    overflow: visible !important;
+  }
+
+  /* ---------------------------------------------------------
+     ATIVIDADE
+     --------------------------------------------------------- */
+
+  .print-activity-card {
+    margin-bottom: 6mm !important;
+    padding-bottom: 4mm !important;
+
+    border-bottom: 1px solid #d7ded9 !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-activity-card:last-child {
+    border-bottom: none !important;
+  }
+
+  /* ---------------------------------------------------------
+     TÍTULO DA ATIVIDADE
+     --------------------------------------------------------- */
+
+  .print-activity-title {
+    margin: 0 0 3mm 0 !important;
+    padding: 0 !important;
+
+    font-size: 14pt !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* ---------------------------------------------------------
+     INFORMAÇÕES DA ATIVIDADE
+     --------------------------------------------------------- */
+
+  .print-activity-info,
+  .print-activity-meta,
+  .activity-meta,
+  .print-meta-grid {
+    width: 100% !important;
+
+    margin: 0 0 3mm 0 !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-activity-info *,
+  .print-activity-meta *,
+  .activity-meta *,
+  .print-meta-grid * {
+    box-sizing: border-box !important;
+  }
+
+  /* ---------------------------------------------------------
+     OBSERVAÇÕES — PRINCIPAL ALTERAÇÃO
+     --------------------------------------------------------- */
+
+  .print-description-box {
+    width: 100% !important;
+    max-width: none !important;
+
+    margin: 4mm 0 5mm 0 !important;
+    padding: 4mm !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid #cbd5cf !important;
+    border-radius: 2mm !important;
+
+    background: #f8faf9 !important;
+
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+
+    overflow: visible !important;
+  }
+
+  .print-description-box h4,
+  .print-description-box .description-title,
+  .print-description-box strong {
+    display: block !important;
+
+    margin: 0 0 2mm 0 !important;
+
+    font-size: 11.5pt !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+  }
+
+  /*
+   * OBSERVAÇÕES EM FONTE GRANDE
+   * Antes: 11pt
+   * Agora: 13pt
+   */
+
+  .print-description-box p {
+    margin: 2mm 0 0 0 !important;
+    padding: 0 !important;
+
+    color: #1f2d25 !important;
+
+    font-size: 13pt !important;
+    line-height: 1.7 !important;
+
+    font-weight: 500 !important;
+
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+
+    max-width: none !important;
+
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .print-description-box p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* ---------------------------------------------------------
+     TEXTOS GERAIS
+     --------------------------------------------------------- */
+
+  .print-diary-report p,
+  .print-diary-report span,
+  .print-diary-report div {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .print-diary-report p {
+    max-width: 100% !important;
+  }
+
+  /* ---------------------------------------------------------
+     TABELAS
+     --------------------------------------------------------- */
 
   table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 8.5pt;
+    width: 100% !important;
+    max-width: 100% !important;
+
+    border-collapse: collapse !important;
+
+    font-size: 9pt !important;
+
+    break-inside: auto !important;
+    page-break-inside: auto !important;
   }
 
   thead {
-    display: table-header-group;
-    background: #edf4ef !important;
+    display: table-header-group !important;
+  }
+
+  tfoot {
+    display: table-footer-group !important;
+  }
+
+  tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  th,
+  td {
+    padding: 2mm !important;
+
+    vertical-align: top !important;
+
+    border: 1px solid #d5ddd8 !important;
+
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
   }
 
   th {
-    color: #245e40 !important;
-    font-weight: 800;
-    letter-spacing: .03em;
+    font-weight: 700 !important;
   }
 
-  th, td {
-    padding: 3mm 2.5mm !important;
-    border-bottom: 1px solid #e3e9e5 !important;
-    vertical-align: top;
+  /* ---------------------------------------------------------
+     RESUMOS / ESTATÍSTICAS
+     --------------------------------------------------------- */
+
+  .report-summary,
+  .statistics-grid,
+  .stats-grid,
+  .summary-grid,
+  .report-statistics {
+    width: 100% !important;
+    max-width: none !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
-  tr { break-inside: avoid; page-break-inside: avoid; }
-
-  .report-document::after {
-    content: "Caderno de Campo • Laís L. Andrade";
-    display: block;
-    margin-top: 8mm;
-    padding-top: 3mm;
-    border-top: 1px solid #dbe3dd;
-    color: #748078;
-    font-size: 8pt;
-    text-align: center;
+  .report-summary-card,
+  .stat-card,
+  .summary-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
+
+  /* ---------------------------------------------------------
+     FOTOS
+     
+     REGRA PRINCIPAL:
+     A seção de fotos normal da tela NÃO será impressa.
+     --------------------------------------------------------- */
+
+  .report-photo-section {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /*
+   * O anexo fotográfico usado pelo PDF GERAL permanece
+   * visível na impressão.
+   */
+
+  .report-photo-appendix {
+    display: block !important;
+    visibility: visible !important;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* ---------------------------------------------------------
+     FOTOS DO GERAL
+     --------------------------------------------------------- */
+
+  .report-photo-appendix .report-photo-list {
+    width: 100% !important;
+    max-width: none !important;
+
+    display: block !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .report-photo-appendix .report-photo-group {
+    width: 100% !important;
+
+    margin: 0 0 6mm 0 !important;
+    padding: 0 !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .report-photo-appendix .report-photo-card {
+    width: 100% !important;
+
+    margin: 0 0 5mm 0 !important;
+    padding: 0 !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+
+    overflow: visible !important;
+  }
+
+  .report-photo-appendix .report-photo-card img {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+
+    max-height: 90mm !important;
+
+    object-fit: contain !important;
+
+    margin: 0 auto !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .report-photo-appendix .report-photo-details,
+  .report-photo-appendix .report-photo-caption,
+  .report-photo-appendix .report-photo-description {
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .report-photo-appendix .report-photo-caption {
+    margin-top: 2mm !important;
+
+    font-size: 10pt !important;
+    line-height: 1.35 !important;
+
+    font-weight: 700 !important;
+  }
+
+  .report-photo-appendix .report-photo-description {
+    margin-top: 1.5mm !important;
+
+    font-size: 9.5pt !important;
+    line-height: 1.45 !important;
+  }
+
+  /* ---------------------------------------------------------
+     FOTOS DO DIÁRIO
+     --------------------------------------------------------- */
+
+  .print-diary-photos-page {
+    display: block !important;
+    visibility: visible !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  .print-diary-photos-page .print-photo-group,
+  .print-diary-photos-page .print-photo-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-diary-photos-page .print-photo-group {
+    width: 100% !important;
+
+    margin: 0 0 7mm 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-diary-photos-page .print-photo-card {
+    width: 100% !important;
+
+    margin: 0 0 6mm 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+  }
+
+  .print-diary-photos-page .print-photo-card img {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: auto !important;
+    max-height: 100mm !important;
+
+    object-fit: contain !important;
+
+    margin: 0 auto !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-diary-photos-page .print-photo-caption {
+    margin-top: 2mm !important;
+
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+
+    font-weight: 700 !important;
+
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  /* ---------------------------------------------------------
+     IMAGENS EM GERAL
+     --------------------------------------------------------- */
+
+  img {
+    max-width: 100% !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* ---------------------------------------------------------
+     EVITA CORTES
+     --------------------------------------------------------- */
+
+  .print-description-box,
+  .print-photo-card,
+  .print-photo-group,
+  .report-photo-card,
+  .report-photo-group,
+  .report-card,
+  .activity-card {
+    overflow: visible !important;
+  }
+
+  /* ---------------------------------------------------------
+     ELEMENTOS QUE NÃO DEVEM CRIAR PÁGINAS EXTRAS
+     --------------------------------------------------------- */
+
+  .hidden,
+  .d-none,
+  [hidden] {
+    display: none !important;
+  }
+
+  /* ---------------------------------------------------------
+     LINKS
+     --------------------------------------------------------- */
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  /* ---------------------------------------------------------
+     QUEBRAS DE PÁGINA
+     --------------------------------------------------------- */
+
+  .page-break {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  .page-break-after {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* ---------------------------------------------------------
+     RODAPÉ
+     --------------------------------------------------------- */
+
+  .print-footer {
+    width: 100% !important;
+
+    margin-top: 6mm !important;
+    padding-top: 2mm !important;
+
+    border-top: 1px solid #d5ddd8 !important;
+
+    font-size: 8pt !important;
+    line-height: 1.3 !important;
+
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* ---------------------------------------------------------
+     GARANTE QUE A VERSÃO DE TELA NÃO APAREÇA NO DIÁRIO
+     --------------------------------------------------------- */
+
+  .reports-page.is-print-diary .report-section,
+  .reports-page.is-print-diary .report-card,
+  .reports-page.is-print-diary .report-photo-section {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .reports-page.is-print-diary .print-diary-report,
+  .reports-page.is-print-diary .print-diary-report * {
+    visibility: visible !important;
+  }
+
 }

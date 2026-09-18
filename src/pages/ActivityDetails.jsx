@@ -22,13 +22,15 @@ import {
   Ruler,
   Scale,
   Sprout,
+  Trash2,
   Wrench,
   X,
 } from "lucide-react";
 
+import db from "../db";
 import { getPropertyById } from "../services/propertyService";
 import { getPlotById } from "../services/plotService";
-import { getPhotosByActivity } from "../services/photoService";
+import { getPhotosByActivity, deletePhoto } from "../services/photoService";
 import { getProductById } from "../services/productService";
 import { getCultures } from "../services/cultureService";
 import { supabase } from "../services/supabase";
@@ -43,6 +45,7 @@ function ActivityDetails({ activity, onBack, onEdit }) {
   const [productData, setProductData] = useState(null);
   const [cultureData, setCultureData] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [deletingPhoto, setDeletingPhoto] = useState(false);
 
   /**
    * =========================================================
@@ -276,22 +279,33 @@ function ActivityDetails({ activity, onBack, onEdit }) {
             }
 
             if (data) {
-              const url =
-                URL.createObjectURL(data);
-
+              const url = URL.createObjectURL(data);
               objectUrls.push(url);
+
+              // Guarda uma cópia local após o primeiro download. Assim,
+              // depois de sincronizar uma vez, a foto continua disponível
+              // no celular mesmo sem internet.
+              try {
+                const fileBuffer = await data.arrayBuffer();
+                await db.photos.update(photo.id, {
+                  file: fileBuffer,
+                  type: data.type || photo.type || "image/jpeg",
+                  updatedAt: photo.updatedAt || new Date().toISOString(),
+                });
+              } catch (cacheError) {
+                console.warn("Foto exibida, mas não foi possível armazenar a cópia offline:", cacheError);
+              }
 
               loadedPhotos.push({
                 id:
                   photo.uuid ||
                   photo.id ||
                   `photo-${Date.now()}`,
+                localId: photo.id,
                 url,
               });
 
-              console.log(
-                "✅ Foto do Supabase carregada!"
-              );
+              console.log("✅ Foto do Supabase carregada e preparada para uso offline!");
             }
           }
         }
@@ -332,6 +346,47 @@ function ActivityDetails({ activity, onBack, onEdit }) {
    * TECLADO DA GALERIA
    * =========================================================
    */
+
+  async function handleDeletePhoto(photoIndex, event) {
+    event?.stopPropagation?.();
+
+    const visualPhoto = photoUrls[photoIndex];
+    if (!visualPhoto?.localId || deletingPhoto) return;
+
+    const confirmed = window.confirm(
+      "Excluir esta foto? Ela também será removida dos outros dispositivos após a sincronização."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setDeletingPhoto(true);
+      await deletePhoto(visualPhoto.localId);
+
+      const removedUrl = visualPhoto.url;
+      if (removedUrl?.startsWith("blob:")) {
+        URL.revokeObjectURL(removedUrl);
+      }
+
+      setPhotos((current) =>
+        current.filter((photo) => photo.id !== visualPhoto.localId)
+      );
+      setPhotoUrls((current) =>
+        current.filter((_, index) => index !== photoIndex)
+      );
+
+      setSelectedPhoto((current) => {
+        if (current === null) return null;
+        if (current === photoIndex) return null;
+        return current > photoIndex ? current - 1 : current;
+      });
+    } catch (error) {
+      console.error("Erro ao excluir foto:", error);
+      alert("Não foi possível excluir a foto.");
+    } finally {
+      setDeletingPhoto(false);
+    }
+  }
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -1155,25 +1210,33 @@ function ActivityDetails({ activity, onBack, onEdit }) {
             <div className="details-photo-grid">
               {photoUrls.map(
                 (photo, index) => (
-                  <button
-                    type="button"
-                    className="details-photo"
-                    key={photo.id}
-                    onClick={() =>
-                      openPhoto(index)
-                    }
-                  >
-                    <img
-                      src={photo.url}
-                      alt={`Foto do registro ${
-                        index + 1
-                      }`}
-                    />
+                  <div className="details-photo-item" key={photo.id}>
+                    <button
+                      type="button"
+                      className="details-photo"
+                      onClick={() => openPhoto(index)}
+                    >
+                      <img
+                        src={photo.url}
+                        alt={`Foto do registro ${index + 1}`}
+                      />
 
-                    <span className="photo-overlay">
-                      <ImageIcon size={20} />
-                    </span>
-                  </button>
+                      <span className="photo-overlay">
+                        <ImageIcon size={20} />
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="details-photo-delete"
+                      onClick={(event) => handleDeletePhoto(index, event)}
+                      disabled={deletingPhoto}
+                      aria-label={`Excluir foto ${index + 1}`}
+                      title="Excluir foto"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 )
               )}
             </div>
@@ -1271,6 +1334,17 @@ function ActivityDetails({ activity, onBack, onEdit }) {
               aria-label="Fechar"
             >
               <X size={22} />
+            </button>
+
+            <button
+              type="button"
+              className="lightbox-delete-photo"
+              onClick={(event) => handleDeletePhoto(selectedPhoto, event)}
+              disabled={deletingPhoto}
+              aria-label="Excluir foto"
+              title="Excluir foto"
+            >
+              <Trash2 size={18} /> Excluir foto
             </button>
 
             {photoUrls.length > 1 && (

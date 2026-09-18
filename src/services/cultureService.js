@@ -39,7 +39,7 @@ export async function getCultures() {
     .reverse()
     .toArray();
 
-  return cultures;
+  return cultures.filter((culture) => culture.deleted !== true);
 }
 
 // =========================================================
@@ -82,7 +82,17 @@ export async function updateCulture(id, culture) {
 // =========================================================
 
 export async function deleteCulture(id) {
-  await db.cultures.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.cultures.get(numericId);
+  if (!existing) return false;
+
+  await db.cultures.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
 
   console.log("CULTURA EXCLUÍDA:", id);
+  return true;
 }

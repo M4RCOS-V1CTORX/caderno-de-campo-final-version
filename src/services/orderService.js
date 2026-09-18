@@ -40,9 +40,9 @@ export async function createOrder(orderData) {
 */
 
 export async function getOrders() {
-  const orders = await db.orders.toArray();
+  const orders = (await db.orders.toArray()).filter((order) => order.deleted !== true);
 
-  return orders.sort((a, b) => {
+  return orders.filter((order) => order.deleted !== true).sort((a, b) => {
     const dateA = new Date(a.date || a.createdAt || 0);
     const dateB = new Date(b.date || b.createdAt || 0);
 
@@ -145,7 +145,16 @@ export async function deleteOrder(id) {
     throw new Error("Pedido não encontrado.");
   }
 
-  await db.orders.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.orders.get(numericId);
+  if (!existing) return false;
+
+  await db.orders.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
 
   return true;
 }

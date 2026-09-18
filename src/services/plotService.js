@@ -28,7 +28,8 @@ export async function getPlots() {
   return await db.plots
     .orderBy("createdAt")
     .reverse()
-    .toArray();
+    .toArray()
+    .then((items) => items.filter((item) => item.deleted !== true));
 }
 
 /* =========================================================
@@ -41,7 +42,7 @@ export async function getPlotsByProperty(propertyId) {
     .equals(Number(propertyId))
     .sortBy("createdAt");
 
-  return plots.reverse();
+  return plots.filter((plot) => plot.deleted !== true).reverse();
 }
 
 /* =========================================================
@@ -69,5 +70,16 @@ export async function updatePlot(id, plot) {
 ========================================================= */
 
 export async function deletePlot(id) {
-  return await db.plots.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.plots.get(numericId);
+  if (!existing) return false;
+
+  await db.plots.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
+
+  return true;
 }

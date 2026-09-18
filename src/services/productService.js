@@ -52,7 +52,8 @@ export async function getProducts() {
   return await db.products
     .orderBy("createdAt")
     .reverse()
-    .toArray();
+    .toArray()
+    .then((items) => items.filter((item) => item.deleted !== true));
 }
 
 /* =========================================================
@@ -101,7 +102,18 @@ export async function updateProduct(id, product) {
 ========================================================= */
 
 export async function deleteProduct(id) {
-  return await db.products.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.products.get(numericId);
+  if (!existing) return false;
+
+  await db.products.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
+
+  return true;
 }
 
 /* =========================================================

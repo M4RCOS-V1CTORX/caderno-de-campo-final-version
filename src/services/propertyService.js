@@ -28,7 +28,8 @@ export async function getProperties() {
   return await db.properties
     .orderBy("createdAt")
     .reverse()
-    .toArray();
+    .toArray()
+    .then((items) => items.filter((item) => item.deleted !== true));
 }
 
 /* =========================================================
@@ -55,6 +56,17 @@ export async function updateProperty(id, property) {
 ========================================================= */
 
 export async function deleteProperty(id) {
-  return await db.properties.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.properties.get(numericId);
+  if (!existing) return false;
+
+  await db.properties.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
+
+  return true;
 }
 

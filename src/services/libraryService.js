@@ -32,7 +32,8 @@ export async function getLibraryItems() {
   return await db.library
     .orderBy("createdAt")
     .reverse()
-    .toArray();
+    .toArray()
+    .then((items) => items.filter((item) => item.deleted !== true));
 }
 
 /* =========================================================
@@ -44,7 +45,7 @@ export async function getLibraryItemsByType(type) {
     .where("type")
     .equals(type)
     .sortBy("createdAt")
-    .then((items) => items.reverse());
+    .then((items) => items.filter((item) => item.deleted !== true).reverse());
 }
 
 /* =========================================================
@@ -75,5 +76,16 @@ export async function updateLibraryItem(id, item) {
 ========================================================= */
 
 export async function deleteLibraryItem(id) {
-  return await db.library.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.library.get(numericId);
+  if (!existing) return false;
+
+  await db.library.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
+
+  return true;
 }

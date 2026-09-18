@@ -29,7 +29,8 @@ export async function getPests() {
   return await db.pests
     .orderBy("createdAt")
     .reverse()
-    .toArray();
+    .toArray()
+    .then((items) => items.filter((item) => item.deleted !== true));
 }
 
 /* =========================================================
@@ -58,5 +59,16 @@ export async function updatePest(id, pest) {
 ========================================================= */
 
 export async function deletePest(id) {
-  return await db.pests.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.pests.get(numericId);
+  if (!existing) return false;
+
+  await db.pests.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
+
+  return true;
 }

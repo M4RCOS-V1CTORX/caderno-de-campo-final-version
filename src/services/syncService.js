@@ -179,6 +179,19 @@ async function upsertRemote(item) {
   }
 }
 
+async function deleteRemotePhoto(storagePath) {
+  if (!storagePath) return;
+
+  const { error } = await supabase.storage
+    .from(PHOTO_BUCKET)
+    .remove([storagePath]);
+
+  // Se o arquivo já não existir, a exclusão continua válida.
+  if (error && !/not found|does not exist|no such file/i.test(error.message || "")) {
+    throw new Error(`Exclusão da foto no Storage falhou: ${error.message}`);
+  }
+}
+
 async function uploadPhoto(photo) {
   if (photo.deleted) return photo.storagePath || null;
 
@@ -368,6 +381,10 @@ async function pushPhotos(onProgress) {
       ...photo,
       activityUuid,
     });
+
+    if (photo.deleted && storagePath) {
+      await deleteRemotePhoto(storagePath);
+    }
 
     await table.update(photo.id, {
       uuid: photo.uuid,

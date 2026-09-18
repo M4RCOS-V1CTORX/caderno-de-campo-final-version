@@ -17,6 +17,7 @@ import {
   Layers3,
   MapPinned,
   ArrowLeft,
+  ArrowRight,
   Building2,
   Leaf,
   ShoppingCart,
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 
 import db from "../db";
+import { supabase } from "../services/supabase";
 import "../styles/reports.css";
 
 function Reports({ onBack }) {
@@ -39,6 +41,8 @@ function Reports({ onBack }) {
   const [pests, setPests] = useState([]);
   const [diseases, setDiseases] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [photos, setPhotos] = useState([]);
+  const [reportPhotoUrls, setReportPhotoUrls] = useState({});
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -62,7 +66,9 @@ function Reports({ onBack }) {
 
       const data = await db[tableName].toArray();
 
-      return Array.isArray(data) ? data : [];
+      return Array.isArray(data)
+        ? data.filter((item) => item?.deleted !== true)
+        : [];
     } catch (error) {
       console.warn(
         `Tabela ${tableName} não disponível nos relatórios:`,
@@ -90,6 +96,7 @@ function Reports({ onBack }) {
         pestsData,
         diseasesData,
         ordersData,
+        photosData,
       ] = await Promise.all([
         getTableData("activities"),
         getTableData("properties"),
@@ -99,6 +106,7 @@ function Reports({ onBack }) {
         getTableData("pests"),
         getTableData("diseases"),
         getTableData("orders"),
+        getTableData("photos"),
       ]);
 
       setActivities(activitiesData);
@@ -109,6 +117,7 @@ function Reports({ onBack }) {
       setPests(pestsData);
       setDiseases(diseasesData);
       setOrders(ordersData);
+      setPhotos(photosData);
     } catch (error) {
       console.error(
         "Erro ao carregar dados dos relatórios:",
@@ -273,6 +282,101 @@ function Reports({ onBack }) {
     startDate,
     endDate,
   ]);
+
+
+  useEffect(() => {
+    let cancelled = false;
+    const objectUrls = [];
+
+    async function loadReportPhotos() {
+      const activityIds = new Set(
+        filteredActivities.map((activity) => String(activity.id))
+      );
+      const activityUuids = new Set(
+        filteredActivities.map((activity) => activity.uuid).filter(Boolean)
+      );
+
+      const relevant = photos.filter((photo) =>
+        !photo.deleted &&
+        (activityIds.has(String(photo.activityId)) ||
+          activityUuids.has(photo.activityUuid))
+      );
+
+      const result = {};
+
+      for (const photo of relevant) {
+        if (cancelled) return;
+
+        let url = null;
+
+        try {
+          if (photo.file) {
+            const blob = photo.file instanceof Blob
+              ? photo.file
+              : new Blob([photo.file], { type: photo.type || "image/jpeg" });
+            url = URL.createObjectURL(blob);
+          } else if (photo.storagePath && navigator.onLine) {
+            const storagePath = normalizeStoragePath(photo.storagePath);
+
+            if (!storagePath) {
+              throw new Error("Caminho de armazenamento da foto inválido.");
+            }
+
+            const { data, error } = await supabase.storage
+              .from("activity-photos")
+              .download(storagePath);
+
+            if (!error && data) {
+              url = URL.createObjectURL(data);
+              objectUrls.push(url);
+
+              // Também deixa a foto disponível offline depois do primeiro acesso.
+              try {
+                await db.photos.update(photo.id, {
+                  file: await data.arrayBuffer(),
+                  type: data.type || photo.type || "image/jpeg",
+                });
+              } catch (cacheError) {
+                console.warn("Não foi possível guardar foto do relatório offline:", cacheError);
+              }
+            }
+          }
+
+          if (url) {
+            if (photo.file) objectUrls.push(url);
+            const photoView = {
+              id: photo.uuid || photo.id,
+              url,
+              name: photo.name || "Registro visual",
+            };
+            const keys = [
+              photo.activityUuid,
+              photo.activityId !== null && photo.activityId !== undefined
+                ? String(photo.activityId)
+                : null,
+            ].filter(Boolean);
+
+            keys.forEach((activityKey) => {
+              if (!result[activityKey]) result[activityKey] = [];
+              result[activityKey].push(photoView);
+            });
+          }
+        } catch (error) {
+          console.warn("Foto ignorada no relatório:", error);
+        }
+      }
+
+      if (!cancelled) setReportPhotoUrls(result);
+    }
+
+    loadReportPhotos();
+
+    return () => {
+      cancelled = true;
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [photos, filteredActivities]);
+
 
   /* =========================================================
      PROPRIEDADES FILTRADAS
@@ -480,11 +584,10 @@ function Reports({ onBack }) {
       ).length;
 
     const withPhotos =
-      filteredActivities.filter(
-        (activity) =>
-          Array.isArray(activity.photos) &&
-          activity.photos.length > 0
-      ).length;
+      filteredActivities.filter((activity) => {
+        const key = activity.uuid || String(activity.id);
+        return (reportPhotoUrls[key] || []).length > 0;
+      }).length;
 
     const completionRate =
       total > 0
@@ -504,7 +607,7 @@ function Reports({ onBack }) {
       withPhotos,
       completionRate,
     };
-  }, [filteredActivities]);
+  }, [filteredActivities, reportPhotoUrls]);
 
   /* =========================================================
      RESUMO DE MANEJO
@@ -655,6 +758,19 @@ function Reports({ onBack }) {
             0
         );
 
+        const movements = Array.isArray(product.stockMovements)
+          ? product.stockMovements
+          : [];
+        const totalEntries = movements
+          .filter((movement) => movement.type === "entrada")
+          .reduce((sum, movement) => sum + parseNumber(movement.quantity), 0);
+        const totalExits = movements
+          .filter((movement) => movement.type === "saida")
+          .reduce((sum, movement) => sum + parseNumber(movement.quantity), 0);
+        const lastMovement = [...movements].sort(
+          (a, b) => new Date(b.date || 0) - new Date(a.date || 0)
+        )[0] || null;
+
         return {
           id: product.id,
           name:
@@ -668,6 +784,10 @@ function Reports({ onBack }) {
             product.unit ||
             product.unidade ||
             "",
+          totalEntries,
+          totalExits,
+          movementCount: movements.length,
+          lastMovement,
           lowStock:
             minimumStock > 0 &&
             stock <= minimumStock,
@@ -696,10 +816,62 @@ function Reports({ onBack }) {
 
   const lowStockProducts = useMemo(() => {
     return stockSummary.filter(
-      (product) =>
-        product.lowStock
+      (product) => product.lowStock
     );
   }, [stockSummary]);
+
+  const stockMetrics = useMemo(() => {
+    const totalCurrent = stockSummary.reduce((sum, product) => sum + product.stock, 0);
+    const totalMinimum = stockSummary.reduce((sum, product) => sum + product.minimumStock, 0);
+    const productsWithMovements = stockSummary.filter((product) => product.movementCount > 0).length;
+    const coveragePercent = totalMinimum > 0
+      ? Math.min(100, Math.round((totalCurrent / totalMinimum) * 100))
+      : null;
+
+    return { totalCurrent, totalMinimum, productsWithMovements, coveragePercent };
+  }, [stockSummary]);
+
+  const stockMovementSummary = useMemo(() => {
+    const rows = [];
+
+    products.forEach((product) => {
+      const movements = Array.isArray(product.stockMovements)
+        ? product.stockMovements
+        : [];
+
+      movements.forEach((movement) => {
+        const date = getActivityDate({ date: movement.date });
+        if (startDate && date && date < startDate) return;
+        if (endDate && date && date > endDate) return;
+
+        rows.push({
+          id: `${product.id}-${movement.id}-${movement.date}`,
+          product: product.name || product.nome || "Produto sem nome",
+          type: movement.type === "entrada" ? "Entrada" : "Saída",
+          quantity: parseNumber(movement.quantity),
+          unit: product.unit || product.unidade || "",
+          reason: movement.reason || "—",
+          date,
+          property: movement.propertyName || movement.property || "—",
+          plot: movement.plotName || movement.plot || "—",
+          source: movement.source || movement.origin || "Manual",
+        });
+      });
+    });
+
+    return rows.sort((a, b) => b.date.localeCompare(a.date));
+  }, [products, startDate, endDate]);
+
+  const stockMovementTotals = useMemo(() => {
+    return stockMovementSummary.reduce(
+      (acc, movement) => {
+        if (movement.type === "Entrada") acc.entries += movement.quantity;
+        else acc.exits += movement.quantity;
+        return acc;
+      },
+      { entries: 0, exits: 0 }
+    );
+  }, [stockMovementSummary]);
 
   /* =========================================================
      RESUMO MENSAL
@@ -3029,12 +3201,16 @@ function Reports({ onBack }) {
                 <div className="section-heading">
                   <div>
                     <span>
-                      ESTOQUE
+                      ESTOQUE ATUAL
                     </span>
 
                     <h3>
-                      Situação atual dos produtos
+                      Situação atual e níveis de reposição
                     </h3>
+
+                    <p className="stock-section-note">
+                      O estoque atual representa a posição registrada no momento da geração do relatório. O histórico de entradas e saídas abaixo respeita o período selecionado.
+                    </p>
                   </div>
                 </div>
 
@@ -3044,12 +3220,68 @@ function Reports({ onBack }) {
                     no estoque.
                   </div>
                 ) : (
-                  <div className="activities-table-wrapper">
+                  <>
+                    <div className="stock-overview-grid">
+                      <div className="stock-overview-card stock-overview-highlight">
+                        <span>ESTOQUE TOTAL ATUAL: </span>
+                        <br/>
+                        <strong>{formatQuantity(stockMetrics.totalCurrent)}</strong>
+                        <br/>
+                        <small>Soma das quantidades cadastradas, respeitando as unidades dos produtos.</small>
+                      </div>
+                      <div className="stock-overview-card">
+                        <br/>
+                        <span>ESTOQUE MÍNIMO SOMADO: </span>
+                        <br/>
+                        <strong>{formatQuantity(stockMetrics.totalMinimum)}</strong>
+                        <br/>
+                        <small>Referência mínima configurada para os produtos.</small>
+                      </div>
+                      <div className="stock-overview-card">
+                        <br/>
+                        <span>COM HISTÓRICO: </span>
+                        <br/>
+                        <strong>{stockMetrics.productsWithMovements}</strong>
+                        <br/>
+                        <small>Produtos com entradas ou saídas registradas. </small>
+                      </div>
+                      <div className={`stock-overview-card ${lowStockProducts.length ? "stock-overview-alert" : "stock-overview-ok"}`}>
+                        <br/>
+                        <span>ALERTAS: </span>
+                        <strong>{lowStockProducts.length}</strong>
+                        <br/>
+                        <small>{lowStockProducts.length ? "Produto(s) no limite ou abaixo do mínimo." : "Nenhum produto abaixo do mínimo."}</small>
+                        <br/>
+                      </div>
+                    </div>
+
+                    {stockMetrics.coveragePercent !== null && (
+                      <div className="stock-coverage-card">
+                        <div className="stock-coverage-heading">
+                          <div>
+                            <br/>
+                            <span>COBERTURA DO ESTOQUE: </span>
+                            <br/>
+                            <strong>Relação entre estoque atual e mínimo configurado</strong>
+                          </div>
+                          <b>{stockMetrics.coveragePercent}%</b>
+                        </div>
+                        <div className="stock-coverage-track">
+                          <div style={{ width: `${stockMetrics.coveragePercent}%` }} />
+                        </div>
+                        <p>Indicador consolidado. Como os produtos podem utilizar unidades diferentes, a leitura deve ser feita em conjunto com a tabela detalhada.</p>
+                      </div>
+                    )}
+
+                    <div className="activities-table-wrapper">
                     <table className="activities-table">
                       <thead>
                         <tr>
                           <th>
                             Produto
+                          </th>
+                          <th>
+                            Tipo
                           </th>
                           <th>
                             Estoque atual
@@ -3058,7 +3290,16 @@ function Reports({ onBack }) {
                             Estoque mínimo
                           </th>
                           <th>
-                            Unidade
+                            Entradas
+                          </th>
+                          <th>
+                            Saídas
+                          </th>
+                          <th>
+                            Movimentos
+                          </th>
+                          <th>
+                            Último movimento
                           </th>
                           <th>
                             Situação
@@ -3075,26 +3316,29 @@ function Reports({ onBack }) {
                               }
                             >
                               <td>
-                                <strong>
-                                  {product.name}
-                                </strong>
+                                <strong>{product.name}</strong>
+                              </td>
+
+                              <td>{product.type || "—"}</td>
+
+                              <td>
+                                <strong>{formatQuantity(product.stock)} {product.unit || ""}</strong>
                               </td>
 
                               <td>
-                                {formatQuantity(
-                                  product.stock
-                                )}
+                                {formatQuantity(product.minimumStock)} {product.unit || ""}
                               </td>
 
+                              <td>{formatQuantity(product.totalEntries)} {product.unit || ""}</td>
+                              <td>{formatQuantity(product.totalExits)} {product.unit || ""}</td>
+                              <td>{product.movementCount}</td>
                               <td>
-                                {formatQuantity(
-                                  product.minimumStock
-                                )}
-                              </td>
-
-                              <td>
-                                {product.unit ||
-                                  "—"}
+                                {product.lastMovement ? (
+                                  <div>
+                                    <strong>{formatDate(product.lastMovement.date)} • {product.lastMovement.type === "entrada" ? "Entrada" : "Saída"}</strong>
+                                    <small>{product.lastMovement.reason || "Movimentação registrada"}</small>
+                                  </div>
+                                ) : "—"}
                               </td>
 
                               <td>
@@ -3113,6 +3357,85 @@ function Reports({ onBack }) {
                             </tr>
                           )
                         )}
+                      </tbody>
+                    </table>
+                  </div>
+                  </>
+                )}
+              </section>
+
+              <section className="report-section stock-alert-section">
+                <div className="section-heading">
+                  <div>
+                    <span>REPOSIÇÃO</span>
+                    <h3>Produtos que exigem atenção</h3>
+                  </div>
+                  <span>{lowStockProducts.length} alerta(s)</span>
+                </div>
+
+                {lowStockProducts.length === 0 ? (
+                  <div className="stock-alert-ok-message">
+                    <strong>Estoque dentro dos níveis configurados.</strong>
+                    <span>Nenhum produto está no limite ou abaixo do estoque mínimo cadastrado.</span>
+                  </div>
+                ) : (
+                  <div className="stock-alert-list">
+                    {lowStockProducts.map((product) => {
+                      const deficit = Math.max(0, product.minimumStock - product.stock);
+                      return (
+                        <div className="stock-alert-item" key={`alert-${product.id}`}>
+                          <div>
+                            <strong>{product.name}</strong>
+                            <span>{product.type || "Produto sem categoria"}</span>
+                          </div>
+                          <div className="stock-alert-values">
+                            <span>Atual <b>{formatQuantity(product.stock)} {product.unit || ""}</b></span>
+                            <span>Mínimo <b>{formatQuantity(product.minimumStock)} {product.unit || ""}</b></span>
+                            {deficit > 0 && <span>Falta <b>{formatQuantity(deficit)} {product.unit || ""}</b></span>}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+
+              <section className="report-section stock-movement-report-section">
+                <div className="section-heading">
+                  <div>
+                    <span>MOVIMENTAÇÕES</span>
+                    <h3>Entradas e saídas de produtos</h3>
+                  </div>
+                  <span>{stockMovementSummary.length} movimentações</span>
+                </div>
+
+                <div className="report-stat-grid">
+                  <StatCard icon={<ArrowLeft size={16} />} label="Entradas" value={formatQuantity(stockMovementTotals.entries)} />
+                  <StatCard icon={<ArrowRight size={16} />} label="Saídas" value={formatQuantity(stockMovementTotals.exits)} />
+                  <StatCard icon={<Package size={16} />} label="Movimentações" value={stockMovementSummary.length} />
+                </div>
+
+                {stockMovementSummary.length === 0 ? (
+                  <div className="report-empty">Nenhuma movimentação encontrada no período selecionado.</div>
+                ) : (
+                  <div className="activities-table-wrapper">
+                    <table className="activities-table">
+                      <thead><tr>
+                        <th>Data</th><th>Produto</th><th>Tipo</th><th>Quantidade</th>
+                        <th>Motivo</th><th>Origem</th><th>Propriedade / Talhão</th>
+                      </tr></thead>
+                      <tbody>
+                        {stockMovementSummary.map((movement) => (
+                          <tr key={movement.id}>
+                            <td>{formatDate(movement.date)}</td>
+                            <td><strong>{movement.product}</strong></td>
+                            <td><span className={`status-badge ${movement.type === "Entrada" ? "concluído" : "em-andamento"}`}>{movement.type}</span></td>
+                            <td>{formatQuantity(movement.quantity)} {movement.unit}</td>
+                            <td>{movement.reason}</td>
+                            <td>{movement.source}</td>
+                            <td>{movement.property}{movement.plot !== "—" ? ` / ${movement.plot}` : ""}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -3570,8 +3893,69 @@ function Reports({ onBack }) {
           )}
 
           {/* ===================================================
-              RODAPÉ
+              REGISTRO VISUAL
           =================================================== */}
+
+          {filteredActivities.some((activity) => {
+            const key = activity.uuid || String(activity.id);
+            return (reportPhotoUrls[key] || []).length > 0;
+          }) && (
+            <section className="report-section report-photo-appendix">
+              <div className="section-heading">
+                <div>
+                  <span>REGISTRO VISUAL</span>
+                  <h3>Fotos das atividades</h3>
+                </div>
+                <span>Fotos anexadas aos registros filtrados</span>
+              </div>
+
+              <div className="report-photo-list">
+                {filteredActivities.map((activity) => {
+                  const key = activity.uuid || String(activity.id);
+                  const activityPhotos = reportPhotoUrls[key] || [];
+                  if (!activityPhotos.length) return null;
+
+                  return (
+                    <div className="report-photo-group" key={`photos-${activity.id}`}>
+                      <div className="report-photo-caption">
+                        <strong>{activity.title || activity.activity || activity.name || "Atividade sem título"}</strong>
+                        <span>
+                          {formatDate(getActivityDate(activity))} • {getPropertyName(activity.propertyId ?? activity.property)} • {getPlotName(activity.plotId ?? activity.fieldId ?? activity.talhaoId)}
+                        </span>
+                      </div>
+                      <div className="report-photo-grid">
+                        {activityPhotos.map((photo, index) => (
+                          <figure key={photo.id} className="report-photo-card">
+                            <img
+                              src={photo.url}
+                              alt={`Foto ${index + 1} — ${activity.title || "atividade"}`}
+                              onError={(event) => {
+                                event.currentTarget.closest(".report-photo-card")?.classList.add("photo-load-error");
+                              }}
+                            />
+                            <figcaption>Foto {index + 1}{photo.name ? ` • ${photo.name}` : ""}</figcaption>
+                          </figure>
+                        ))}
+                      </div>
+
+                      <div className="report-photo-details">
+                        <div><span>Status</span><strong>{activity.managementStatus || "Não informado"}</strong></div>
+                        <div><span>Tipo de manejo</span><strong>{activity.managementType || activity.type || activity.category || "Não informado"}</strong></div>
+                        <div><span>Local</span><strong>{activity.location || "Não informado"}</strong></div>
+                        <div><span>Produto</span><strong>{getActivityProduct(activity) || "Não informado"}</strong></div>
+                        <div><span>Quantidade</span><strong>{getActivityQuantity(activity) ? `${formatQuantity(getActivityQuantity(activity))} ${getProductUnit(activity)}` : "Não informado"}</strong></div>
+                        <div><span>Praga</span><strong>{getActivityPest(activity) || "Não informado"}</strong></div>
+                        <div><span>Doença</span><strong>{getActivityDisease(activity) || "Não informado"}</strong></div>
+                        <div><span>Planejado</span><strong>{formatDate(activity.managementPlannedDate)}</strong></div>
+                        <div><span>Concluído</span><strong>{formatDate(activity.managementCompletedDate)}</strong></div>
+                        <div className="report-photo-description"><span>Descrição / observações</span><strong>{activity.description || "Nenhuma observação registrada."}</strong></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           <footer className="report-footer">
             <div>
@@ -3801,11 +4185,19 @@ function ActivitiesTable({
                     </strong>
 
                     {activity.location && (
-                      <small>
-                        {
-                          activity.location
-                        }
-                      </small>
+                      <small>Local: {activity.location}</small>
+                    )}
+
+                    {getActivityProduct(activity) && (
+                      <small>Produto: {getActivityProduct(activity)}</small>
+                    )}
+
+                    {getActivityQuantity(activity) > 0 && (
+                      <small>Quantidade: {formatQuantity(getActivityQuantity(activity))} {getProductUnit(activity)}</small>
+                    )}
+
+                    {activity.description && (
+                      <small>Observações: {activity.description}</small>
                     )}
                   </td>
 
@@ -4103,6 +4495,34 @@ function extractName(value) {
   }
 
   return "";
+}
+
+function normalizeStoragePath(value) {
+  if (!value) return "";
+
+  const raw = String(value).trim();
+  if (!raw) return "";
+
+  try {
+    if (/^https?:\/\//i.test(raw)) {
+      const url = new URL(raw);
+      const marker = "/storage/v1/object/";
+      const markerIndex = url.pathname.indexOf(marker);
+
+      if (markerIndex >= 0) {
+        let path = url.pathname.slice(markerIndex + marker.length);
+        path = path.replace(/^\/(?:public|sign|authenticated)\//, "");
+        path = path.replace(/^activity-photos\//, "");
+        return decodeURIComponent(path);
+      }
+    }
+  } catch {
+    return raw.replace(/^\/+/, "");
+  }
+
+  return raw
+    .replace(/^\/+/, "")
+    .replace(/^activity-photos\//, "");
 }
 
 function parseNumber(value) {

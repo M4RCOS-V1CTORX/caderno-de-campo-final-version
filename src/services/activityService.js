@@ -1,28 +1,52 @@
 import db from "../db";
 
 /* =========================================================
-   CRIAR ATIVIDADE
+   UTILITÁRIOS
 ========================================================= */
 
-export async function createActivity(activity) {
-  const newActivity = {
+function toNullableNumber(value) {
+  if (
+    value === undefined ||
+    value === null ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  const number = Number(value);
+
+  return Number.isFinite(number) ? number : null;
+}
+
+function cleanString(value) {
+  return typeof value === "string"
+    ? value.trim()
+    : "";
+}
+
+function normalizeActivityData(activity = {}, options = {}) {
+  const {
+    preserveCreatedAt = false,
+  } = options;
+
+  const data = {
     ...activity,
 
-    propertyId: activity.propertyId
-      ? Number(activity.propertyId)
-      : null,
+    propertyId: toNullableNumber(activity.propertyId),
 
-    plotId: activity.plotId
-      ? Number(activity.plotId)
-      : null,
+    plotId: toNullableNumber(activity.plotId),
 
-    title: activity.title?.trim() || "",
+    title: cleanString(activity.title),
+
     date: activity.date || "",
-    location: activity.location?.trim() || "",
-    description: activity.description?.trim() || "",
 
-    managementType:
-      activity.managementType?.trim() || "",
+    location: cleanString(activity.location),
+
+    description: cleanString(activity.description),
+
+    managementType: cleanString(
+      activity.managementType
+    ),
 
     managementStatus:
       activity.managementStatus || "",
@@ -34,38 +58,59 @@ export async function createActivity(activity) {
     managementCompletedDate:
       activity.managementCompletedDate || "",
 
-    pest:
-      activity.pest?.trim() || "",
+    pest: cleanString(activity.pest),
 
-    disease:
-      activity.disease?.trim() || "",
+    disease: cleanString(activity.disease),
 
-    product:
-      activity.product?.trim() || "",
+    product: cleanString(activity.product),
 
-    productId: activity.productId
-      ? Number(activity.productId)
-      : null,
+    productId: toNullableNumber(
+      activity.productId
+    ),
 
-    quantity:
-      activity.quantity?.trim() || "",
+    quantity: cleanString(activity.quantity),
 
     quantityValue:
       activity.quantityValue !== undefined &&
       activity.quantityValue !== null &&
       activity.quantityValue !== ""
-        ? Number(activity.quantityValue)
+        ? toNullableNumber(activity.quantityValue)
         : null,
 
     synced: false,
-
-    createdAt: new Date().toISOString(),
   };
 
-  const id = await db.activities.add(newActivity);
+  if (!preserveCreatedAt) {
+    data.createdAt =
+      activity.createdAt ||
+      new Date().toISOString();
+  }
 
-  console.log("ATIVIDADE SALVA:", id);
-  console.log("DADOS SALVOS:", newActivity);
+  return data;
+}
+
+/* =========================================================
+   CRIAR ATIVIDADE
+========================================================= */
+
+export async function createActivity(activity = {}) {
+  const newActivity = normalizeActivityData(
+    activity
+  );
+
+  const id = await db.activities.add(
+    newActivity
+  );
+
+  console.log(
+    "ATIVIDADE SALVA:",
+    id
+  );
+
+  console.log(
+    "DADOS SALVOS:",
+    newActivity
+  );
 
   return {
     id,
@@ -78,19 +123,58 @@ export async function createActivity(activity) {
 ========================================================= */
 
 export async function getActivities() {
-  console.log("LENDO BANCO LOCAL...");
+  console.log(
+    "LENDO BANCO LOCAL..."
+  );
 
-  const activities = await db.activities.toArray();
+  try {
+    // Registros excluídos permanecem no IndexedDB
+    // como tombstones para que a exclusão possa
+    // ser enviada ao Supabase durante a sincronização.
 
-  console.log("TOTAL NO BANCO:", activities.length);
-  console.log("DADOS DO BANCO:", activities);
+    const activities =
+      await db.activities
+        .filter(
+          (activity) =>
+            activity?.deleted !== true
+        )
+        .toArray();
 
-  return activities.sort((a, b) => {
-    return (
-      new Date(b.createdAt) -
-      new Date(a.createdAt)
+    console.log(
+      "TOTAL NO BANCO:",
+      activities.length
     );
-  });
+
+    console.log(
+      "DADOS DO BANCO:",
+      activities
+    );
+
+    return activities.sort(
+      (a, b) => {
+        const dateA = new Date(
+          a?.date ||
+            a?.createdAt ||
+            0
+        ).getTime();
+
+        const dateB = new Date(
+          b?.date ||
+            b?.createdAt ||
+            0
+        ).getTime();
+
+        return dateB - dateA;
+      }
+    );
+  } catch (error) {
+    console.error(
+      "ERRO AO LER ATIVIDADES:",
+      error
+    );
+
+    throw error;
+  }
 }
 
 /* =========================================================
@@ -98,7 +182,15 @@ export async function getActivities() {
 ========================================================= */
 
 export async function getActivityById(id) {
-  return await db.activities.get(Number(id));
+  const numericId = Number(id);
+
+  if (!Number.isFinite(numericId)) {
+    return undefined;
+  }
+
+  return await db.activities.get(
+    numericId
+  );
 }
 
 /* =========================================================
@@ -106,77 +198,174 @@ export async function getActivityById(id) {
 ========================================================= */
 
 export async function deleteActivity(id) {
-  console.log("EXCLUINDO ATIVIDADE:", id);
+  const numericId = Number(id);
 
-  await db.activities.delete(Number(id));
+  if (!Number.isFinite(numericId)) {
+    throw new Error(
+      "ID da atividade inválido."
+    );
+  }
 
-  console.log("ATIVIDADE EXCLUÍDA COM SUCESSO");
+  const activity =
+    await db.activities.get(
+      numericId
+    );
+
+  if (!activity) {
+    throw new Error(
+      "Atividade não encontrada."
+    );
+  }
+
+  console.log(
+    "EXCLUINDO ATIVIDADE:",
+    numericId
+  );
+
+  const now =
+    new Date().toISOString();
+
+  /*
+    Exclusão lógica:
+    o registro continua localmente até a
+    sincronização enviar o tombstone ao Supabase.
+  */
+
+  await db.activities.update(
+    numericId,
+    {
+      deleted: true,
+      deletedAt: now,
+      updatedAt: now,
+      synced: false,
+    }
+  );
+
+  /*
+    As fotos relacionadas também recebem
+    tombstone para que possam ser removidas
+    dos demais dispositivos e do Storage
+    durante a sincronização.
+  */
+
+  const byActivityId =
+    await db.photos
+      .where("activityId")
+      .equals(numericId)
+      .toArray();
+
+  const byActivityUuid =
+    activity.uuid
+      ? await db.photos
+          .where("activityUuid")
+          .equals(activity.uuid)
+          .toArray()
+      : [];
+
+  /*
+    Remove possíveis duplicidades quando
+    a mesma foto possui activityId e activityUuid.
+  */
+
+  const photos = Array.from(
+    new Map(
+      [
+        ...byActivityId,
+        ...byActivityUuid,
+      ].map((photo) => [
+        photo.uuid ||
+          String(photo.id),
+        photo,
+      ])
+    ).values()
+  );
+
+  if (photos.length > 0) {
+    await db.transaction(
+      "rw",
+      db.photos,
+      async () => {
+        for (const photo of photos) {
+          await db.photos.update(
+            photo.id,
+            {
+              deleted: true,
+              deletedAt: now,
+              updatedAt: now,
+              synced: false,
+            }
+          );
+        }
+      }
+    );
+  }
+
+  console.log(
+    "ATIVIDADE MARCADA COMO EXCLUÍDA:",
+    numericId
+  );
 }
 
 /* =========================================================
    ATUALIZAR ATIVIDADE
 ========================================================= */
 
-export async function updateActivity(id, activity) {
-  console.log("ATUALIZANDO ATIVIDADE:", id);
+export async function updateActivity(
+  id,
+  activity = {}
+) {
+  const numericId = Number(id);
 
-  const updatedActivity = {
-    ...activity,
+  if (!Number.isFinite(numericId)) {
+    throw new Error(
+      "ID da atividade inválido."
+    );
+  }
 
-    propertyId: activity.propertyId
-      ? Number(activity.propertyId)
-      : null,
+  console.log(
+    "ATUALIZANDO ATIVIDADE:",
+    numericId
+  );
 
-    plotId: activity.plotId
-      ? Number(activity.plotId)
-      : null,
+  const existingActivity =
+    await db.activities.get(
+      numericId
+    );
 
-    title: activity.title?.trim() || "",
-    date: activity.date || "",
-    location: activity.location?.trim() || "",
-    description: activity.description?.trim() || "",
+  if (!existingActivity) {
+    throw new Error(
+      "Atividade não encontrada."
+    );
+  }
 
-    managementType:
-      activity.managementType?.trim() || "",
+  const updatedActivity =
+    normalizeActivityData(
+      activity,
+      {
+        preserveCreatedAt: true,
+      }
+    );
 
-    managementStatus:
-      activity.managementStatus || "",
+  /*
+    Mantém o createdAt original caso
+    o formulário não o envie novamente.
+  */
 
-    /* DATAS DO MANEJO */
-    managementPlannedDate:
-      activity.managementPlannedDate || "",
+  if (!updatedActivity.createdAt) {
+    updatedActivity.createdAt =
+      existingActivity.createdAt ||
+      new Date().toISOString();
+  }
 
-    managementCompletedDate:
-      activity.managementCompletedDate || "",
+  /*
+    Atualização local precisa voltar
+    para a fila de sincronização.
+  */
 
-    pest:
-      activity.pest?.trim() || "",
-
-    disease:
-      activity.disease?.trim() || "",
-
-    product:
-      activity.product?.trim() || "",
-
-    productId: activity.productId
-      ? Number(activity.productId)
-      : null,
-
-    quantity:
-      activity.quantity?.trim() || "",
-
-    quantityValue:
-      activity.quantityValue !== undefined &&
-      activity.quantityValue !== null &&
-      activity.quantityValue !== ""
-        ? Number(activity.quantityValue)
-        : null,
-
-    synced: false,
-  };
+  updatedActivity.synced = false;
 
   await db.activities.update(
-    Number(id),
+    numericId,
     updatedActivity
   );
 
@@ -190,7 +379,7 @@ export async function updateActivity(id, activity) {
   );
 
   return {
-    id: Number(id),
+    id: numericId,
     ...updatedActivity,
   };
 }

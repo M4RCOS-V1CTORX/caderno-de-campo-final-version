@@ -29,7 +29,8 @@ export async function getDiseases() {
   return await db.diseases
     .orderBy("createdAt")
     .reverse()
-    .toArray();
+    .toArray()
+    .then((items) => items.filter((item) => item.deleted !== true));
 }
 
 /* =========================================================
@@ -64,5 +65,16 @@ export async function updateDisease(
 ========================================================= */
 
 export async function deleteDisease(id) {
-  return await db.diseases.delete(Number(id));
+  const numericId = Number(id);
+  const existing = await db.diseases.get(numericId);
+  if (!existing) return false;
+
+  await db.diseases.update(numericId, {
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    synced: false,
+  });
+
+  return true;
 }
